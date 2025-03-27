@@ -33,7 +33,7 @@ class MainApp(QtGui.QApplication):
 			cmd = cmd.toLocal8Bit().data()
 			exec(cmd)
 			#eval(str(cmd))
-		except Exception, ex:
+		except Exception as ex:
 			#print '[execCmd] ERROR: %s command: [%s]' %(ex,cmd)
 			self.control.trace.error("[execCmd] ERROR: %s command: [%s]" %(ex,cmd))
 			import traceback
