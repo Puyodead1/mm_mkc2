@@ -14,7 +14,7 @@ import proxy.tools as tools
 
 INFO_WIDTH = 85
 
-(S_OK, S_RECOVERED, S_LOAD, S_INVALID) = range(4)
+(S_OK, S_RECOVERED, S_LOAD, S_INVALID) = list(range(4))
 
 class SlotInfo:
     def __init__(self, hasdisc = False, rfid = ""):
@@ -152,12 +152,12 @@ class DiscRecovery(CheckBase):
                 item.status = S_LOAD
                 return
             
-            if not self.slotList.has_key(slotid):
+            if slotid not in self.slotList:
                 self.slotList[slotid] = SlotInfo(True, item.realRfid)
                 self._checkOneSlot(slotid)
     
     def _checkAllSlots(self):
-        slots = self.slotList.keys()
+        slots = list(self.slotList.keys())
         for slot in slots:
             self._checkOneSlot(slot)
     
@@ -196,7 +196,7 @@ class DiscRecovery(CheckBase):
         self.totalPlan = []
         plan = []
         
-        slots = self.slotList.keys()
+        slots = list(self.slotList.keys())
         for slot in slots:
             self._aplan(plan, slot)
             if plan:
@@ -245,7 +245,7 @@ class DiscRecovery(CheckBase):
             self._doOnePlan(plan)
     
     def _reloadOne(self):
-        slots = self.slotList.keys()
+        slots = list(self.slotList.keys())
         for slot in slots:
             if self.slotList[slot].status == S_LOAD:
                 self.controller.rackToRack(slot, 223)
@@ -265,7 +265,7 @@ class DiscRecovery(CheckBase):
         xstr = "SLOT".ljust(4) + "| " + "DB DISC".center(8) + " | " + "REAL DISC".center(8) + "| " + "DB RFID".center(18) + " | " + "REAL RFID".center(18) + " | " + "TO SLOT".center(7) + " | " + "LOAD".ljust(5)
         self.log.info(xstr)
         
-        slots = self.slotList.keys()
+        slots = list(self.slotList.keys())
         slots.sort()
         for slot in slots:
             info = self.slotList[slot]
@@ -285,7 +285,7 @@ if __name__ == "__main__":
     dr = DiscRecovery()
     
     if len(sys.argv) < 2:
-        print "no slot id"
+        print("no slot id")
         sys.exit(-1)
     
     try:
@@ -295,11 +295,11 @@ if __name__ == "__main__":
         dr.start()
         dr.run()
         dr.end()
-    except MkcLockException, ex:
-        print ex.message
+    except MkcLockException as ex:
+        print(ex.message)
         sys.exit(-2)
     except:
-        print traceback.format_exc()
+        print(traceback.format_exc())
         sys.exit(-1)
     
     sys.exit(0)

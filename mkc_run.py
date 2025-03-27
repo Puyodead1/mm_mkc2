@@ -63,25 +63,25 @@ def getPid():
         rfd.close()
 
 def stopMkc(chkLock):
-    print 'stopping mkc...'
+    print('stopping mkc...')
     
     pid = getPid()
-    print "MKC PID:", pid
+    print("MKC PID:", pid)
     
     if pid == None:
-        print 'MKC is NOT running'
+        print('MKC is NOT running')
         return True
     else:
         if chkLock and isLocked():
-            answer = raw_input('LOCK file found, MKC might be busy, kill it anyway? yes|NO ')
+            answer = input('LOCK file found, MKC might be busy, kill it anyway? yes|NO ')
             if answer != 'yes':
-                print 'You chose not to kill, MKC will live on'
+                print('You chose not to kill, MKC will live on')
                 return False
         
         connProxy.logMkcEvent(category="system", action="startup", data1="MKC Stop")
         cmd = 'kill -9 ' + str(pid)
         os.system(cmd)
-        print 'MKC stopped'
+        print('MKC stopped')
         
         cmd = "pkill -f %s" % QTGUI
         os.system(cmd)
@@ -93,18 +93,18 @@ def stopMkc(chkLock):
         return True
 
 def startMkc():
-    print 'Starting mkc...'
+    print('Starting mkc...')
     
     if getPid() == None:
         cmd = 'nohup ./mkc_run.py >nohup.out 2>&1 &'
         os.system(cmd)
-        print 'MKC started'
-        print "Starting HDMI ....."
+        print('MKC started')
+        print("Starting HDMI .....")
         #time.sleep(5)
         startHdmi()
     else:
-        print 'MKC is already running'
-        print "please use './mkc.py stop' to stop the previous MKC instance"
+        print('MKC is already running')
+        print("please use './mkc.py stop' to stop the previous MKC instance")
 
 #=============================================================================
 #    Main 
@@ -133,19 +133,19 @@ if __name__ == "__main__":
                     chkLock = 0
             if stopMkc(chkLock) == True:            
                 startMkc()
-            print 'Done!'
+            print('Done!')
 
         else:
-            print "Invalid parameter one, try 'restart', 'stop', to start omit parameters "
+            print("Invalid parameter one, try 'restart', 'stop', to start omit parameters ")
     else:
         if getPid() == None:
             from main import start
-            print "MKC Version: %s" % MKC_VERSION
+            print("MKC Version: %s" % MKC_VERSION)
             
             start()
         else:
-            print "MKC is already running"
-            print "please use './mkc.py stop' to stop the previous MKC instance"
+            print("MKC is already running")
+            print("please use './mkc.py stop' to stop the previous MKC instance")
 
 #=============================================================================
 # EOF

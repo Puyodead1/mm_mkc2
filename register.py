@@ -16,8 +16,8 @@ Change Log:
 # =================================================================
 # =    Import
 # -----------------------------------------------------------------
-import httplib
-import urllib
+import http.client
+import urllib.request, urllib.parse, urllib.error
 import os
 import traceback
 import socket
@@ -37,13 +37,13 @@ log = initlog("register")
 SSH_TIMEOUT = 60 * 60
 
 def serverCommand(ip, func, param={}, port=None, timeout=15):
-    http = httplib.HTTPConnection(ip, port)
+    http = http.client.HTTPConnection(ip, port)
     headers = {"Content-type": "application/x-www-form-urlencoded",
                "Accept": "text/plain",
                "Kiosk": getKioskId()}
     
     params = {"function_name":func, "params":param}
-    urlParams = urllib.urlencode(params)
+    urlParams = urllib.parse.urlencode(params)
     
     http.request("POST", "/api", urlParams, headers)
     http.sock.settimeout(timeout)
@@ -174,17 +174,17 @@ class Register:
     def run(self):
         try:
             if not self._needRegister():
-                print "No need to register, just quit"
+                print("No need to register, just quit")
                 return 1
             
             mac = getEthMac().strip()
             #mac = "vincent.chen"
             kioskID = getKioskId()
             
-            params = urllib.urlencode({"mac": mac, "kiosk_id": kioskID, 
+            params = urllib.parse.urlencode({"mac": mac, "kiosk_id": kioskID, 
                                        "kc": self._get_kiosk_capacity()})
             log.info("Start to call conn register service with param %s" % params)
-            conn = httplib.HTTPConnection(CONN_SERVICE_URL)
+            conn = http.client.HTTPConnection(CONN_SERVICE_URL)
             conn.request("POST", "/registerKiosk", params)
             response = conn.getresponse()
             

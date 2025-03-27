@@ -200,8 +200,8 @@ def createDaemon():
     try:
         if os.fork() > 0:
             sys.exit(0) # exit father...
-    except OSError, error:
-        print 'fork #1 failed: %d (%s)' % (error.errno, error.strerror)
+    except OSError as error:
+        print('fork #1 failed: %d (%s)' % (error.errno, error.strerror))
         sys.exit(1)
     
     # it separates the son from the father
@@ -215,10 +215,10 @@ def createDaemon():
         if pid > 0:
             msg = 'Daemon PID %d' % pid
             log.info(msg)
-            print msg
+            print(msg)
             sys.exit(0)
-    except OSError, error:
-        print 'fork #2 failed: %d (%s)' % (error.errno, error.strerror)
+    except OSError as error:
+        print('fork #2 failed: %d (%s)' % (error.errno, error.strerror))
         sys.exit(1)
 
 def getLock():
@@ -227,10 +227,10 @@ def getLock():
         fcntl.flock(file.fileno(), fcntl.LOCK_EX|fcntl.LOCK_NB)
         flag = fcntl.fcntl(file, fcntl.F_GETFD)
         fcntl.fcntl(file, fcntl.F_SETFD, flag or fcntl.FD_CLOEXEC)
-    except IOError, ex:
+    except IOError as ex:
         log.error("Cannot lock file %s, another mkc.py is running." % LOCK_FILE)
         return None
-    except Exception, ex:
+    except Exception as ex:
         log.error("Exception caught when getLock: %s" % str(ex))
         return None
     
@@ -365,7 +365,7 @@ if __name__ == "__main__":
         if sys.argv[2] == "-f":
             chkLock = False
     else:
-        print USAGE % pname
+        print(USAGE % pname)
         sys.exit(1)
     
     log.info("New Command: %s" % command)
@@ -380,8 +380,8 @@ if __name__ == "__main__":
     elif command == "restart":
         restartMkc(chkLock)
     else:
-        print "error parameter"
-        print USAGE % pname
+        print("error parameter")
+        print(USAGE % pname)
         sys.exit(1)
 
     createDaemon()

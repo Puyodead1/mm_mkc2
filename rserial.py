@@ -7,6 +7,7 @@ import time
 #from mcommon import TimerThread
 import threading
 import string
+from functools import reduce
 #import time
 IGNORE_SEQ=0
 
@@ -245,7 +246,7 @@ class RSerial:
    """
         
     def __checksum(self, s):
-        return reduce(lambda x, y:x+y, map(ord, s)) & 0xff
+        return reduce(lambda x, y:x+y, list(map(ord, s))) & 0xff
         
     def __encodeHexByte(self, num):
         """ encode a one byte hex number into two acsii chars"""
@@ -261,7 +262,7 @@ class RSerial:
          #   print "."
             self.rxBuf.append(self.ser.read())
         if len(self.rxBuf)>0:
-            print self.rxBuf
+            print(self.rxBuf)
         self.__processRxQueue()
     
     def __increaseRSeq(self):
@@ -336,8 +337,8 @@ class RSerial:
     def __processResult(self,ackseq,packet):
        # print "%s",str(ackseq), packet
         s=""
-        print "reply: %s" % s.join(packet)
-        print "-->"
+        print("reply: %s" % s.join(packet))
+        print("-->")
         if self.resultCallback:
             self.resultCallback(ackseq,packet)
     """
@@ -453,7 +454,7 @@ class RSerial:
                 else:
                    pass
                   #  print "Unknown or Not Implemented packet,ignored,type:",ord(ch)
-            except Exception, ex:
+            except Exception as ex:
             # packet might not have enough chars for popping, disgard packet
                 #print "__processRxPacket exception", ex
                 return
@@ -539,7 +540,7 @@ class RSerial:
                 packet+=self.__encodeHexByte(seq)
                 packet+=self.ETX
             elif type==self.TYPE_EVENT:
-                print "Send Event"
+                print("Send Event")
                ##STX EVENT SEQ ASEQ event_type event_ content ETX
                 packet+=self.__encodeHexByte(txseq)
                 checksum=self.__checksum(data)
@@ -607,7 +608,7 @@ class RSerial:
                 if self.__getAck(seq):
                     return seq
             #timeout
-            print "SendResultSync Timeout"
+            print("SendResultSync Timeout")
             count=count-1
             seq=self.sendPacket(type=self.TYPE_RESULT,seq=seqNum,data=data,tx_seq=seq)
         self.state=self.STATE_DISCONNECTED
@@ -615,10 +616,10 @@ class RSerial:
         #raise TimeoutException("SendResultSync:",data)
     
     def sendEvent(self,data,timeout=DEFAULT_TIMEOUT,retry=DEFAULT_RETRY):
-        print "sendEvent"
+        print("sendEvent")
         if self.__state()!=self.STATE_CONNECTED:
             return None
-        print "sendEventSync..."
+        print("sendEventSync...")
         seq=self.sendPacket(type=self.TYPE_EVENT,data=data)
         if not seq:
             raise NotImplementedException("")       
@@ -630,7 +631,7 @@ class RSerial:
                     return
                 time.sleep(w)
             #timeout
-            print "SendEvent timeout"
+            print("SendEvent timeout")
             count=count-1
             seq=self.sendPacket(type=self.TYPE_EVENT,data=data,tx_seq=seq)
         return -2
@@ -655,11 +656,11 @@ class Control(threading.Thread):
         self.lock=threading.Lock()
  
     def eventCallback(self,packet):
-        print "in event callback"
-        print packet
+        print("in event callback")
+        print(packet)
     
     def resultCallback(self,seq,data):
-        print "resultCallback:",seq
+        print("resultCallback:",seq)
         try:
             self.lock.acquire()
             self.resultQ[seq]=data
@@ -670,7 +671,7 @@ class Control(threading.Thread):
         r=None
         try:
             self.lock.acquire()
-            if self.resultQ.has_key(seq):
+            if seq in self.resultQ:
                 r=self.resultQ.pop(seq)
         finally:
             self.lock.release()
@@ -684,15 +685,15 @@ class Control(threading.Thread):
         while True:
             try:
                 current=ser.sendDataSync("Test Data")
-                print "Sent Data with seq:", current
+                print("Sent Data with seq:", current)
                 while not self.getResult(current):
                     time.sleep(0.1)
-                print "Got Result"
-            except TimeoutException,ex:
-                print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+                print("Got Result")
+            except TimeoutException as ex:
+                print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
                 sys.exit()
                 ser.handshake()
-                print "timeout:",ex,"handshake again"
+                print("timeout:",ex,"handshake again")
                # sys.exit()
                 
             time.sleep(0.2)
@@ -711,7 +712,7 @@ class Slave(threading.Thread):
             self.request.append((seq,data))
         finally:
             self.lock.release()
-        print "XXXXXXXXXXXXXXX"
+        print("XXXXXXXXXXXXXXX")
 
     def run(self):
         while True:
@@ -740,11 +741,11 @@ class Control_Debug(threading.Thread):
         self.lock=threading.Lock()
     
     def eventCallback(self,packet):
-        print "in event call back"
-        print packet
+        print("in event call back")
+        print(packet)
     
     def resultCallback(self,seq,data):
-        print "resultCallback:",seq
+        print("resultCallback:",seq)
         s=""
         try:
             self.lock.acquire()
@@ -758,7 +759,7 @@ class Control_Debug(threading.Thread):
         r=None
         try:
             self.lock.acquire()
-            if self.resultQ.has_key(seq):
+            if seq in self.resultQ:
                 r=self.resultQ.pop(seq)
         finally:
             self.lock.release()
@@ -778,7 +779,7 @@ class Control_Debug(threading.Thread):
             current=ser.sendDataSync(command)
             if async:
                 return current
-            print "Sent Data with seq:", current
+            print("Sent Data with seq:", current)
             import time
             r=0
             tick=time.time()
@@ -788,18 +789,18 @@ class Control_Debug(threading.Thread):
                     break
                 time.sleep(0.2)
             if r:
-                print "Got Result"
+                print("Got Result")
                 if r.find("err") !=-1:
                    import sys
                    sys.exit(-1)
-                   print "Error executed"
+                   print("Error executed")
                    return 1
                 return 0
             else:
-                print "Get Result Timeout"
+                print("Get Result Timeout")
                 return -1
-         except TimeoutException,ex:
-            print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+         except TimeoutException as ex:
+            print("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
             return -1
 
 
@@ -872,9 +873,9 @@ class Control_Debug(threading.Thread):
             time.sleep(2)
             while True:
                 r1=ser.sendDataSync("move_debug cancel")
-                print "AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+                print("AAAAAAAAAAAAAAAAAAAAAAAAAAAA")
                 self.clearResult();
-                print "send cancel to exchange..."
+                print("send cancel to exchange...")
                 self._do_cmd("move_debug exchange_cancel")
                 r1=ser.sendDataSync("move_debug exchange hello")
                 t=time.time()
@@ -882,9 +883,9 @@ class Control_Debug(threading.Thread):
                     status = self.getResult(r1)
                     if status:
                         break;
-                print status
+                print(status)
                 if status and status.find('ok')!=-1:
-                    print "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+                    print("MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM")
                     break
             self._do_cmd("move_debug exchange door_close")
 
@@ -920,37 +921,37 @@ class Control_Debug(threading.Thread):
          #   self._do_cmd("move_debug control exchange_offset 2050")
          #   self._do_cmd("move_debug control bottom_offset -50 ")
          #   self._do_cmd("move_debug control goto_home")
-            for i in xrange(101, 169):
+            for i in range(101, 169):
                # self.rack_to_rack(i,i+1)
                 if i > 169:
-                    print "Out of range!"
+                    print("Out of range!")
                 else:
                     self.action(i)   
 
             #self.rack_to_rack(170,228)
        
-            for i in xrange(228,269):
+            for i in range(228,269):
                # self.rack_to_rack(i,i+1)
                 if i > 269:
-                    print "Out of range!"
+                    print("Out of range!")
                 else:
                     self.action(i)   
         
             #self.rack_to_rack(270,501)
              
-            for i in xrange(501,568):
+            for i in range(501,568):
                # self.rack_to_rack(i,i+1)
                 if i > 568:
-                    print "Out of range!"
+                    print("Out of range!")
                 else:
                     self.action(i)   
 
             #self.rack_to_rack(569,601)
             
-            for i in xrange(601,668):
+            for i in range(601,668):
                # self.rack_to_rack(i,i+1)
                 if i > 668:
-                    print "Out of range!"
+                    print("Out of range!")
                 else:
                     self.action(i)   
             
@@ -987,8 +988,8 @@ class Control_Debug(threading.Thread):
             # self._do_cmd("move_debug exchange door_close")
         """ 
 def eventCallback(event):
-    print "************evenetCallback"
-    print event
+    print("************evenetCallback")
+    print(event)
 
 
 if __name__=="__main__":
@@ -1007,7 +1008,7 @@ if __name__=="__main__":
         thread.join()
         sys.exit(0)
     elif len(sys.argv)>1 and  sys.argv[1]=="update":
-        r=raw_input( "this method has been obsoleted by downloader.py, are you still want to go on?[y/N]")
+        r=input( "this method has been obsoleted by downloader.py, are you still want to go on?[y/N]")
         if r.lower()!="y":
             sys.exit(0)
         port="/dev/ttyS0"
@@ -1020,7 +1021,7 @@ if __name__=="__main__":
         os.system("minicom")
         sys.exit(0)
     elif len(sys.argv)>1 and  sys.argv[1]=="reboot_machine":
-        r=raw_input("machine will be power cycled, are you sure?[y/N]")
+        r=input("machine will be power cycled, are you sure?[y/N]")
         if r.lower()=="y":
             ser=serial.Serial("/dev/ttyUSB0",9600,parity=serial.PARITY_NONE,timeout=5)
             buf=chr(0x02)+chr(0x50)+chr(0x4f)+chr(0x4e)+chr(0x03)
@@ -1029,14 +1030,14 @@ if __name__=="__main__":
             buf=chr(0x02)+r+chr(0x03)
             ser.write(buf)
             r=ser.read()
-            print r
+            print(r)
             buf=chr(0x02)+chr(0x53)+chr(0x54)+chr(0x41)+chr(0x03)
             ser.write(buf)
             ser.close()
         sys.exit(0)
 
     elif len(sys.argv)>1 and  sys.argv[1]=="reboot_control":
-        r=raw_input("will reset control board, are you sure?[y/N]")
+        r=input("will reset control board, are you sure?[y/N]")
         if r.lower()=="y":
             ser=serial.Serial("/dev/ttyUSB0",9600,parity=serial.PARITY_NONE,timeout=5)
             buf=chr(0x02)+chr(0x50)+chr(0x4f)+chr(0x4e)+chr(0x03)
@@ -1045,7 +1046,7 @@ if __name__=="__main__":
             buf=chr(0x02)+r+chr(0x03)
             ser.write(buf)
             r=ser.read()
-            print r
+            print(r)
             buf=chr(0x02)+chr(0x4d)+chr(0x52)+chr(0x45)+chr(0x03)
             ser.write(buf)
             ser.close()
@@ -1066,7 +1067,7 @@ if __name__=="__main__":
     else:
         ser.handshake()
         while True:
-            s=raw_input("-->")
+            s=input("-->")
             if s:
                 ser.sendDataSync(s)
 
