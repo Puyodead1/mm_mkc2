@@ -3934,8 +3934,7 @@ class ConnProxy(Proxy):
                         plan = []
                         STATE = 1
                         RFID = 0
-                        for None in list(current.keys()):
-                            key = None
+                        for key in list(current.keys()):
                             if current[key][STATE] in ('empty', 'out'):
                                 blanks.append(key)
                                 current.pop(key)
