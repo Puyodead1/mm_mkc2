@@ -18,7 +18,7 @@ from squery import socketQuery
 log = logging.getLogger('qt-component')
 log.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s %(message)s')
-rotateHandle = logging.handlers.RotatingFileHandler('/home/mm/kiosk/var/log/qt-component.log', 'a', 1024 * 1024 * 10, 7)
+rotateHandle = logging.handlers.RotatingFileHandler('/home/puyodead1/kiosk/var/log/qt-component.log', 'a', 1024 * 1024 * 10, 7)
 rotateHandle.setFormatter(formatter)
 log.addHandler(rotateHandle)
 
@@ -3298,8 +3298,7 @@ class allKeyboard(QtGui.QWidget):
             
             try:
                 type = data['type']
-            except Exception:
-                ex = None
+            except Exception as ex:
                 print('[setType] Error: type can NOT be NULL! %s' % ex)
 
             if type == 'password':
@@ -3985,8 +3984,7 @@ class Player(QtCore.QObject):
                 print('[Error] mplayer can not start: %s' % self.opt_list)
                 self.proc.terminate()
                 return False
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('[Player] [Error] when start mplayer %s: %s' % (self.opt_list, ex))
 
 
@@ -4075,8 +4073,7 @@ class featureList(QtGui.QTableWidget):
             
             self.resizeColumnToContents(0)
             self.resizeRowsToContents()
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
 
@@ -4304,7 +4301,7 @@ class myForm(QtGui.QWidget):
                     'upc': '013131137491',
                     'state': 'in',
                     'slot_id': '2012-02-02 12:12',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/36986.jpg',
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/36986.jpg',
                     'movie_title': 'Jake Speed (1986)' },
                 {
                     'price': '39.00',
@@ -4312,7 +4309,7 @@ class myForm(QtGui.QWidget):
                     'upc': '013137800092',
                     'state': 'in',
                     'slot_id': '102',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/132343.jpg',
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/132343.jpg',
                     'movie_title': 'Acolytes (2008)' }] }
         ml.setMovieList(data)
 
@@ -4372,37 +4369,37 @@ class myForm(QtGui.QWidget):
             'ctr_movie_list': [
                 {
                     'upc': '502192',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/78268_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/78268_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/23875_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/23875_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/117153_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/117153_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/105002_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/105002_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/104899_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/104899_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/116983_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/116983_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/19748_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/19748_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/103867_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/103867_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/116412_big.jpg' },
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/116412_big.jpg' },
                 {
                     'upc': '502194',
-                    'movie_pic': '/home/mm/kiosk/var/gui/pic/74337_big.jpg' }] }
+                    'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/74337_big.jpg' }] }
         mf.setMovieList(data)
         mf.show()
 
@@ -4420,7 +4417,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'John' }],
                 'rfid': 1,
-                'movie_pic': '/home/mm/var/images/goodsrec/images/735.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/735.jpg',
                 'is_bluray': '2' },
             {
                 'feature': [
@@ -4431,7 +4428,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'Alice' }],
                 'rfid': 2,
-                'movie_pic': '/home/mm/var/images/goodsrec/images/737.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/737.jpg',
                 'is_bluray': '2' },
             {
                 'feature': [
@@ -4442,7 +4439,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'Hely' }],
                 'rfid': 3,
-                'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
                 'is_bluray': '2' },
             {
                 'feature': [
@@ -4453,7 +4450,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'Vivi' }],
                 'rfid': 3,
-                'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
                 'is_bluray': '2' },
             {
                 'feature': [
@@ -4464,7 +4461,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'Linken' }],
                 'rfid': 4,
-                'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
                 'is_bluray': '2' },
             {
                 'feature': [
@@ -4475,7 +4472,7 @@ class myForm(QtGui.QWidget):
                     {
                         'CC Name': 'Yoki' }],
                 'rfid': '6',
-                'movie_pic': '/home/mm/var/images/goodsrec/images/740.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/740.jpg',
                 'is_bluray': '2' }]
         data_1 = [
             {
@@ -4486,7 +4483,7 @@ class myForm(QtGui.QWidget):
                         'time': '2012' },
                     {
                         'aa': 'bb' }],
-                'movie_pic': '/home/mm/var/images/goodsrec/images/735.jpg',
+                'movie_pic': '/home/puyodead1/var/images/goodsrec/images/735.jpg',
                 'is_bluray': '2' }]
         ds.setDiscList(data)
 

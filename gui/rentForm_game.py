@@ -149,7 +149,7 @@ class RentMainForm(QtGui.QWidget):
                 {
                     'is_bluray': '0',
                     'upc': '794043125041',
-                    'movie_pic': '/home/mm/kiosk/mkc2/gui/image/trailer.jpg',
+                    'movie_pic': '/home/puyodead1/kiosk/mkc2/gui/image/trailer.jpg',
                     'movie_big_pic': '131932_big.jpg',
                     'movie_title': '17 Again (2009)',
                     'available_count': '1' }] }

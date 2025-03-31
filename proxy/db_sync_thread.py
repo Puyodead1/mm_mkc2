@@ -52,8 +52,7 @@ class DbSyncThread(threading.Thread):
         
         try:
             self.http_timeout = DEFAULT_SOCKET_TIMEOUT
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.http_timeout = 300
 
 
@@ -76,15 +75,13 @@ class DbSyncThread(threading.Thread):
                 
                 try:
                     record = self.getOneRecord()
-                except IOError:
-                    ex = None
+                except IOError as ex:
                     if str(ex).lower().find('broken pipe') > -1:
                         self.log.critical('Critical error in get one record: %s' % str(ex))
                         sys.exit()
                     else:
                         self.log.error('Error occurs when get one record: %s' % str(ex))
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     msg = 'Error occurs when get one record: %s'
                     self.log.error(msg % str(ex))
                     continue
@@ -115,8 +112,7 @@ class DbSyncThread(threading.Thread):
             
             try:
                 params = eval(paramsStr)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Error when eval the params(%s): %s'
                 raise Exception(msg % (paramsStr, str(ex)))
 
@@ -160,15 +156,13 @@ class DbSyncThread(threading.Thread):
                 if self.lastError != msg:
                     self.log.error(msg)
                     self.lastError = msg
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in syncOneRecord: %s' % ex)
                 sys.exit()
             else:
                 self.log.error('Error occurs when syncOneRecord: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self._increase_time_sleep()
             msg = 'Error when syncOneRecord for (%s): %s'
             self.log.error(msg % (record, ex))
@@ -205,8 +199,7 @@ class DbSyncThread(threading.Thread):
                             msg = params['message']
                             msg += '<br /><br />Kiosk Time: %s' % addTime
                             params['message'] = msg
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         m = 'Error when change msg in syncNoSequenceData : %s' % ex
                         self.log.error(m)
 
@@ -225,23 +218,20 @@ class DbSyncThread(threading.Thread):
                         if self.lastError != result:
                             self.lastError = result
                             self.log.error('NS %s: %s' % (syncId, result))
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     m = 'Error when syncNoSequenceData : %s' % str(ex)
                     self.log.error(m)
                     self._increase_time_sleep()
                 
 
                 time.sleep(SLEEP_PERIOD[self.sleep_period_index])
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in syncNoSequenceData: %s' % ex)
                 sys.exit()
             else:
                 self.log.error('Error in syncNoSequenceData: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             m = 'Error when syncNoSequenceData: %s' % ex
             self.log.error(m)
 
@@ -285,27 +275,23 @@ class DbSyncThread(threading.Thread):
                                     self.lastError = result
                                     self.log.error('RK %s: %s' % (syncId, result))
                                 
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             m = 'syncRemoteKioskData: %s' % ex
                             self.log.error(m)
                             self._increase_time_sleep()
 
                         time.sleep(SLEEP_PERIOD[self.sleep_period_index])
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     m = 'syncRemoteKioskData(%s): %s' % (kioskId, ex)
                     self.log.error(m)
 
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in syncRemoteKioskData: %s' % ex)
                 sys.exit()
             else:
                 self.log.error('Error in syncRemoteKioskData: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error in syncRemoteKioskData: %s' % ex)
 
 
@@ -337,8 +323,7 @@ class DbSyncThread(threading.Thread):
                 self.syncDb.update(sql, {
                     'state': state,
                     'syncId': syncId })
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Time %s: Error when setSyncStateById to (%s) for %s: %s'
                 self.log.error(msg % (i, state, syncId, ex))
                 if i >= 4:
@@ -363,8 +348,7 @@ class DbSyncThread(threading.Thread):
             self.syncDb.update(sql, (syncDate,))
             sql = 'DELETE FROM db_sync_no_sequence WHERE state=1 AND sync_time<?;'
             self.syncDb.update(sql, (syncDate,))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error in rmSyncBefore3Month: %s' % ex)
 
 
@@ -397,18 +381,15 @@ class DbSyncThread(threading.Thread):
             r = http.getresponse()
             data = r.read()
             result = eval(data)
-        except socket.timeout:
-            ex = None
+        except socket.timeout as ex:
             result = {
                 'result': 'timeout',
                 'zdata': 'Connection timeout' }
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             result = {
                 'result': 'socketerror',
                 'zdata': 'Connection Refused' }
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = str(ex)
             self.log.error('httpCall exception: ' + msg)
             result = {

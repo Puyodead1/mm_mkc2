@@ -38,8 +38,7 @@ class BakupDbThread(threading.Thread):
                 backup_db_to_local.main()
             
             log.info('BakupDbThread::End to run for %s:%s' % (self.bakType, self.runTime))
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('BakupDbThread::Error when run report for %s:%s:%s' % (self.bakType, self.runTime, ex))
 
 
@@ -101,15 +100,13 @@ class ManageThread(object):
                 self.count += 1
                 if self.count >= 8640:
                     self.count = 0
-            except IOError:
-                ex = None
+            except IOError as ex:
                 if str(ex).lower().find('broken pipe') > -1:
                     self.log.error('ManageThread(%s)::Fatal error: %s' % (self.count, ex))
                     os.abort()
                 else:
                     self.log.error('ManageThread::Error when running ManageThread(%s):%s' % (self.count, ex))
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('ManageThread::Error when running ManageThread(%s):%s' % (self.count, ex))
 
             time.sleep(self.interval_second)

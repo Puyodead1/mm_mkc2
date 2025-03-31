@@ -90,7 +90,7 @@ if __name__ == '__main__':
                 'upc': '013131137491',
                 'state': 'in',
                 'slot_id': '101',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/36986.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/36986.jpg',
                 'movie_title': 'Jake Speed (1986)' },
             {
                 'price': '39.00',
@@ -98,7 +98,7 @@ if __name__ == '__main__':
                 'upc': '013137800092',
                 'state': 'in',
                 'slot_id': '102',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/132343.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/132343.jpg',
                 'movie_title': 'Acolytes (2008)' }] }
     mainf.show()
     mainf.ui.ctr_movie_list.setMovieList(data)

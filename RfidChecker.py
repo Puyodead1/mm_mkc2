@@ -48,12 +48,12 @@ class RfidChecker:
     
     def stopMkc(self):
         self.log.info('Stop MKC.')
-        os.system('cd /home/mm/kiosk/mkc2;./mkc.py stop')
+        os.system('cd /home/puyodead1/kiosk/mkc2;./mkc.py stop')
 
     
     def startMkc(self):
         self.log.info('Start MKC.')
-        os.system('cd /home/mm/kiosk/mkc2;./mkc.py start')
+        os.system('cd /home/puyodead1/kiosk/mkc2;./mkc.py start')
 
     
     def start(self):
@@ -91,11 +91,9 @@ class RfidChecker:
                 self._checkOneDisc(slot, info)
             
             self.finish()
-        except NoDiscException:
-            ex = None
+        except NoDiscException as ex:
             self.log.error(ex.message)
-        except RobotException:
-            ex = None
+        except RobotException as ex:
             self.log.error(ex.message)
         except Exception:
             msg = 'Unknown exception raised.'

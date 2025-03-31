@@ -40,15 +40,13 @@ class TopupCerePayThread(threading.Thread):
                             res = proxy.topup_cerepay(cpCfg['MERCHANTID'], cpCfg['PASSWORD'], cpCfg['CURRENCY'], topup['cerepay_member_id'], proxy._getAmount(topup['amount']), topup['oid'])
                             if str(res['errCode']) != str(topup['state']):
                                 proxy._update_cerepay_topup_queue(topup['id'], res['errCode'], res['errMsg'])
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             log.error('process %s: %s' % (topup, ex))
 
                     
                 
                 del proxy
-            except Exception:
-                ex = None
+            except Exception as ex:
                 log.error('process: %s' % ex)
 
             time.sleep(600)

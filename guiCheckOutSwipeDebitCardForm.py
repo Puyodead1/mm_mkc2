@@ -187,41 +187,35 @@ class CheckOutSwipeDebitCardForm(CustomerForm):
                     msg = N_('Max rental count reached.')
                     pm = { }
                 
-                raise InvalidMemberException(msg, pm)
+                raise InvalidMemberexcept ion(msg, pm)
             self._checkMemberDetail()
             globalSession.customer = self.customer
             self.nextWindowID = 'CheckOutEjectForm'
             self.windowJump = True
             return None
-        except CardDeclinedException:
-            ex = None
+        except CardDeclinedException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except DebitCardTimeOut:
-            ex = None
+        except DebitCardTimeOut as ex:
             self.timeoutSec = 0
             log.error('getResForSA reach time out')
-        except ValidateCouponException:
-            ex = None
+        except ValidateCouponException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert',
                 'height': '250' })
-        except InvalidCouponException:
-            ex = None
+        except InvalidCouponException as ex:
             textlen = 333 + len(invalidUserCoupons) * 38
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert',
                 'height': str(textlen) })
-        except InvalidMemberException:
-            ex = None
+        except InvalidMemberException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
 
         super(CheckOutSwipeDebitCardForm, self)._run()

@@ -106,15 +106,13 @@ class MediaDownloadThread(threading.Thread):
                         upcs = '(%s)' % str(row['upc'])
                         mdq.setMediaName(mdqId, mediaName)
                         mdq.setState(mdqId, state)
-                    except IOError:
-                        ex = None
+                    except IOError as ex:
                         if str(ex).lower().find('broken pipe') > -1:
                             self.log.critical('Critical error in media_download_thread: %s' % str(ex))
                             sys.exit()
                         else:
                             self.log.error('Error in media_download_thread: %s' % str(ex))
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         m = 'Error when download media for %s: %s' % (str(row), str(ex))
                         self.log.error(m)
 
@@ -126,8 +124,7 @@ class MediaDownloadThread(threading.Thread):
                 time.sleep(300)
                 self.lastAccessTime = self.accessTime
                 self.accessTime = getCurTime('%H:%M')
-            except IOError:
-                ex = None
+            except IOError as ex:
                 if str(ex).lower().find('broken pipe') > -1:
                     self.log.critical('Critical error in media_download_thread: %s' % ex)
                     sys.exit()
@@ -157,8 +154,7 @@ class MediaDownloadThread(threading.Thread):
                     self.log.info('Successfully delete %s in _delUnavailableUpc.' % upc)
             
             del proxy
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when delete unavailable upc: %s' % ex)
 
 
@@ -175,8 +171,7 @@ class MediaDownloadThread(threading.Thread):
             rows = self.mediaDb.query(sql)
             for upc, in rows:
                 upcList.append(upc)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when get available upc: %s' % ex)
 
         return upcList
@@ -198,8 +193,7 @@ class MediaDownloadThread(threading.Thread):
                 self.log.info('Correct all needed download media.')
                 sql = "UPDATE media SET state='notconnect' WHERE state NOT IN ('success', 'found');"
                 self.mediaDb.update(sql)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('Error when correct all needed download media: %s' % ex)
 
         
@@ -217,8 +211,7 @@ class MediaDownloadThread(threading.Thread):
                 proxy = UmgProxy.getInstance()
                 hdTrailers = proxy.getHDTrailerForKiosk()
                 del proxy
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('Error when getHDTrailerForKiosk: %s' % ex)
 
             if hdTrailers:
@@ -242,8 +235,7 @@ class MediaDownloadThread(threading.Thread):
                             else:
                                 shutil.move(tmpPath, needPath)
                                 self.log.info('Download HD trailer %s successfully.' % url)
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.log.error('Error when download the HD trailer(%s): %s' % (trailer, ex))
                     
 
@@ -256,8 +248,7 @@ class MediaDownloadThread(threading.Thread):
                         if fileName not in fileList and os.path.isfile(filePath) and '.'.join(fileName.split('.')[:-1]).isdigit():
                             self.log.info('Remove HD Trailer %s' % filePath)
                             os.remove(filePath)
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.log.error('Error when remove HD Trailer %s: %s' % (fileName, ex))
 
                 
@@ -286,8 +277,7 @@ class MediaDownloadThread(threading.Thread):
             else:
                 hd = now + datetime.timedelta(seconds = 60)
             hdTime = hd.strftime('%H:%M')
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in getHDTime: %s' % ex)
 
         return hdTime
@@ -301,8 +291,7 @@ class MediaDownloadThread(threading.Thread):
             sql = 'delete from media where media_name=:mediaName;'
             self.mediaDb.update(sql, params)
             os.remove(os.path.join(MEDIA_PATH, mediaName))
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = 'Error when remove the media(%s) in _rmOneMedia: %s'
             self.log.error(msg % (mediaName, str(ex)))
 
@@ -361,8 +350,7 @@ class MediaDownloadThread(threading.Thread):
                     os.remove(filePath)
                     m = 'Download file md5: %s, original file md5: %s'
                     self.log.error(m % (fileMd5, mediaMd5))
-        except Exception:
-            ex = None
+        except Exception as ex:
             state = 'failed'
             msg = 'Error when download media (%s) to path %s: %s'
             self.log.error(msg % (mediaName, mediaPath, ex))
@@ -399,8 +387,7 @@ class MediaDownloadThread(threading.Thread):
                 if lastATime <= before30Days:
                     media.append(m)
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when get media which need remove: %s' % str(ex))
 
         return media
@@ -417,8 +404,7 @@ class MediaDownloadThread(threading.Thread):
             rows = self.mediaDb.query(sql)
             for mediaName, in rows:
                 media.append(mediaName)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when get unavailable media: %s' % str(ex))
 
         return media
@@ -449,8 +435,7 @@ class MediaDownloadThread(threading.Thread):
             mf.update(f.read())
             f.close()
             fileMd5 = mf.hexdigest()
-        except Exception:
-            ex = None
+        except Exception as ex:
             m = 'Error when get the md5 for the file %s: %s' % (filePath, str(ex))
             self.log.error(m)
 
@@ -470,8 +455,7 @@ class MediaDownloadThread(threading.Thread):
             row = db.query(sql, 'one')
             if row and row[0].upper() < 'V0.4':
                 dbPath = UPC_DB_PATH
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.info('Error in _getDbPath: %s' % ex)
 
         return dbPath
@@ -490,8 +474,7 @@ class MediaDownloadThread(threading.Thread):
             del proxy
             if result:
                 limit = float(result)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_getBandwithLimitation: %s' % ex)
 
         return limit

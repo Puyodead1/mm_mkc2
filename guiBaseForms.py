@@ -210,13 +210,11 @@ class MMForm(object):
         try:
             self._initComponents()
             self._run()
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             log.error('%s:%s\n%s' % (self.windowID, traceback.format_exc(), ex.errCode))
             globalSession.error = ex
             self.nextWindowID = self.fatalErrorWindowID
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('%s:%s' % (self.windowID, traceback.format_exc()))
             self.nextWindowID = self.uiErrorWindowID
 

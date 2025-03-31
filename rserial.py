@@ -774,10 +774,10 @@ class Control_Debug(threading.Thread):
             self.lock.release()
         return r
 
-    def _do_cmd(self,command,async=False):
+    def _do_cmd(self,command,_async=False):
          try:
             current=ser.sendDataSync(command)
-            if async:
+            if _async:
                 return current
             print("Sent Data with seq:", current)
             import time

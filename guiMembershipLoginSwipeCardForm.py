@@ -157,31 +157,26 @@ class MembershipLoginSwipeCardForm(RobotForm):
                         'text': _('Authenticating ...') })
                     self._checkMemberDetail()
                     self.nextWindowID = 'MembershipCenterForm'
-            except CardReadException:
-                ex = None
+            except CardReadException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert' })
-            except MemberException:
-                ex = None
+            except MemberException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert' })
-            except CardDeclinedException:
-                ex = None
+            except CardDeclinedException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert',
                     'height': '250' })
                 self.fail = True
-            except InvalidMemberException:
-                ex = None
+            except InvalidMemberException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert' })
                 self.fail = True
-            except Exception:
-                ex = None
+            except Exception as ex:
                 raise 
             finally:
                 self.flash.send('txtbox_msg', 'setText', {

@@ -120,41 +120,35 @@ class CerepayTopupSwipeCreditCardForm(CerepayTopupSwipeCardBaseForm):
                     track2 = retFromRobot['track2']
                     (ccNumber, ccName, ccExpDate) = parseTrack(track1, track2)
                     return Customer(ccName, ccNumber, ccExpDate, track2, track1)
-            except CardReadException:
-                ex = None
+            except CardReadException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert' })
-            except CardDeclinedException:
-                ex = None
+            except CardDeclinedException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert',
                     'height': '250' })
                 self.fail = True
-            except InvalidCouponException:
-                ex = None
+            except InvalidCouponException as ex:
                 textlen = 333 + len(invalidUserCoupons) * 38
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert',
                     'height': str(textlen) })
                 self.fail = True
-            except InvalidMemberException:
-                ex = None
+            except InvalidMemberException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert' })
                 self.fail = True
-            except ValidateCouponException:
-                ex = None
+            except ValidateCouponException as ex:
                 self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                     'message': ex.i18nmsg,
                     'type': 'alert',
                     'height': '250' })
                 self.fail = True
-            except Exception:
-                ex = None
+            except Exception as ex:
                 raise 
             finally:
                 self.flash.send('txtbox_msg', 'setText', {

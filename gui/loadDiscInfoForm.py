@@ -526,7 +526,7 @@ if __name__ == '__main__':
             'dvd_version': '2008-8-8',
             'starring': 'asdfasf\nlksjaljfla',
             'genre': 'Music',
-            'movie_pic': '/home/mm/kiosk/var/gui/pic/default.jpg' } })
+            'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/default.jpg' } })
     mainf.ui.ctr_slot_id_list.setList({
         'check_slot_id': '547',
         'front_slot_id': '547',

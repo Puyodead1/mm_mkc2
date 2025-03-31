@@ -48,8 +48,7 @@ class PriceCouponEngine:
         try:
             transactions = self.transactions
             exec(conditions)
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = False
             log.error('An error occured when _chkConditions in price_coupon_kiosk: %s' % str(ex))
 
@@ -136,8 +135,7 @@ class PricePlanEngine:
         try:
             factors = self._calculateFactors(factors)
             exec(self.priceConfig.algorithm)
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = 0
             log.error('An error occured when calculate(PricePlanEngine) in price_coupon_kiosk: %s' % str(ex))
 
@@ -155,8 +153,7 @@ def calculatePrice(params):
         shoppingCart = params['shopping_cart']
         cpe = PriceCouponEngine(shoppingCart)
         result = cpe.calculate()
-    except Exception:
-        ex = None
+    except Exception as ex:
         result = { }
         log.error('An error occured when calculatePrice in price_coupon_kiosk: %s' % str(ex))
 

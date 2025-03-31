@@ -48,8 +48,7 @@ for row in data:
         sql += ' where upc=:upc;'
         db.update(sql, row)
         print('successfully update the synopsis of the upc(%s).' % row['upc'])
-    except Exception:
-        ex = None
+    except Exception as ex:
         print('failed to update the synopsis of the upc(%s): %s' % (row['upc'], str(ex)))
 
 

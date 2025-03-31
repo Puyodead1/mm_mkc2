@@ -17,10 +17,7 @@ import time
 import copy
 import traceback
 
-try:
-    from sqlite3 import OperationalError
-except:
-    from pysqlite2.dbapi2 import OperationalError
+from sqlite3 import OperationalError
 
 from guiRobotForm import RobotForm
 from mcommon import initlog, globalSession, N_, SaveStatusError, WrongInRfidError, ERROR, getPicFullPath
@@ -134,31 +131,25 @@ class ReturnManuallyTakeInForm(RobotForm):
                         self._on_timeout()
                     else:
                         self._ex_to_slot()
-        except WrongInRfidError:
-            ex = None
+        except WrongInRfidError as ex:
             log.error('[%s] - %s' % (self.windowID, ex))
             self.on_wrongInRfid(ex)
-        except SaveStatusError:
-            ex = None
+        except SaveStatusError as ex:
             msg = _('Operation failed, the disc is ejecting back ...\nPlease retry in 5 minutes.')
             self._setProcessText(msg)
             self.on_dberror()
             self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
-        except OperationalError:
-            ex = None
+        except OperationalError as ex:
             msg = _('Operation failed, the disc is ejecting back ...\nPlease retry in 5 minutes.')
             self._setProcessText(msg)
             self.on_dberror()
             self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
-        except InvalidDiscException:
-            ex = None
+        except InvalidDiscException as ex:
             self.on_invalidDisc(ex)
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             self.addAlert(ERROR, ex.message)
             raise 
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
         
 
@@ -166,8 +157,8 @@ class ReturnManuallyTakeInForm(RobotForm):
     
     def _display_out_discs(self):
         '''
-        data = [{"feature":[{"name":"sk"},{"time":"2012"},{"aa":"a"}],"movie_pic":"/home/mm/var/images/goodsrec/images/735.jpg","is_bluray":"2", "rfid":"001FBE2730000104E0"},
-                {"feature":[{"name":"sj"},{"time":"2015"},{"aa":"f"},{"sk":"twj"}],"movie_pic":"/home/mm/var/images/goodsrec/images/740.jpg","is_bluray":"2", "rfid":"001FBE2730000104E0"}]
+        data = [{"feature":[{"name":"sk"},{"time":"2012"},{"aa":"a"}],"movie_pic":"/home/puyodead1/var/images/goodsrec/images/735.jpg","is_bluray":"2", "rfid":"001FBE2730000104E0"},
+                {"feature":[{"name":"sj"},{"time":"2015"},{"aa":"f"},{"sk":"twj"}],"movie_pic":"/home/puyodead1/var/images/goodsrec/images/740.jpg","is_bluray":"2", "rfid":"001FBE2730000104E0"}]
         '''
         out_discs = self.connProxy.getOutDiscsByCode('')
         data = []
@@ -229,12 +220,10 @@ class ReturnManuallyTakeInForm(RobotForm):
                 
                 try:
                     self._verifyDisc()
-                except WrongInRfidError:
-                    ex = None
+                except WrongInRfidError as ex:
                     log.error('[%s] - %s' % (self.windowID, ex))
                     self.on_wrongInRfid(ex)
-                except SaveStatusError:
-                    ex = None
+                except SaveStatusError as ex:
                     msg = _('Operation failed, the disc is ejecting back ...\nPlease retry in 5 minutes.')
                     self._setProcessText(msg)
                     self.on_dberror()
@@ -424,8 +413,7 @@ class ReturnManuallyTakeInForm(RobotForm):
         try:
             cart = ShoppingCart()
             self.returnType = str(self.connProxy.checkRfidAndSaveTrs(self.disc, cart))
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('[%s] Conn Proxy _verifyDisc Error:\n%s' % (self.windowID, traceback.format_exc()))
             msg = N_('Operation failed, please retry in 5 minutes.')
             raise SaveStatusError(msg)
@@ -533,8 +521,7 @@ class ReturnManuallyTakeInForm(RobotForm):
                     
                     try:
                         self._exchangeEject()
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         log.error('exchangeEject failed: %s' % str(ex))
 
                 
@@ -596,12 +583,10 @@ class ReturnManuallyTakeInForm(RobotForm):
             km = KioskMessage(msg, { })
             self._setProcessText(km.i18nmsg)
             self._exchangeToRack()
-        except InsertException:
-            ex = None
+        except InsertException as ex:
             log.error('_exchangeToRack: %s' % str(ex))
             self._insertFailRecovery(ex)
-        except RetrieveExchangeException:
-            ex = None
+        except RetrieveExchangeException as ex:
             log.error('_exchangeToRack: %s' % str(ex))
             self._retrieveFailRecovery(ex)
 

@@ -5,7 +5,7 @@
 Config.py
 '''
 import os
-USER_ROOT = '/home/mm/'
+USER_ROOT = '/home/puyodead1/'
 
 try:
     f = open('/etc/kioskhome')

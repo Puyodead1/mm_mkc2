@@ -127,8 +127,7 @@ class ChipNPin(credit_card.Trade):
             finally:
                 self.sock.close()
 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error when process req(%s): %s' % (req, ex))
 
         return resp
@@ -304,14 +303,12 @@ class ChipNPin(credit_card.Trade):
             trsType = 'POSTAUTH'
             r = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
             (trsCode, trsMsg, oid) = r
-        except credit_card.UpgInternalError:
-            ex = None
+        except credit_card.UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when postauth from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when postauth from UPG: %s' % ex
             trsMsg = m
@@ -328,14 +325,12 @@ class ChipNPin(credit_card.Trade):
             trsType = 'PREAUTH'
             r = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
             (trsCode, trsMsg, oid) = r
-        except credit_card.UpgInternalError:
-            ex = None
+        except credit_card.UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when preauth from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when preauth from UPG: %s' % ex
             trsMsg = m
@@ -353,14 +348,12 @@ class ChipNPin(credit_card.Trade):
                 trsType = 'SALE'
                 r = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
                 (trsCode, trsMsg, oid) = r
-            except credit_card.UpgInternalError:
-                ex = None
+            except credit_card.UpgInternalError as ex:
                 trsCode = '-1'
                 m = 'Internal Error when sale from UPG: %s' % ex
                 trsMsg = m
                 self.log.error(m)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trsCode = '-2'
                 m = 'Local Error when sale from UPG: %s' % ex
                 trsMsg = m
@@ -379,14 +372,12 @@ class ChipNPin(credit_card.Trade):
             trsType = 'CREDIT'
             r = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
             (trsCode, trsMsg, oid) = r
-        except credit_card.UpgInternalError:
-            ex = None
+        except credit_card.UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when sale from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when sale from UPG: %s' % ex
             trsMsg = m

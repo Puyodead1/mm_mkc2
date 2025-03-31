@@ -19,7 +19,7 @@ from . import tools
 import sys
 sys.path.append(config.MKC_PATH)
 import mobject
-OLD_UPC_DB_PATH = '/home/mm/kiosk/db/upc.db.036'
+OLD_UPC_DB_PATH = '/home/puyodead1/kiosk/db/upc.db.036'
 
 def bakDbs():
     '''

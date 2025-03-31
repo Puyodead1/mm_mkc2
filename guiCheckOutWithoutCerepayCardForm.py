@@ -191,46 +191,40 @@ class CheckOutWithoutCerepayCardForm(CustomerForm):
                     msg = N_('Max rental count reached.')
                     pm = { }
                 
-                raise InvalidMemberException(msg, pm)
+                raise InvalidMemberexcept ion(msg, pm)
             self._chargeCard()
             globalSession.customer = self.customer
             self.nextWindowID = 'CheckOutEjectForm'
             self.windowJump = True
-        except CardReadException:
-            ex = None
+        except CardReadException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except CardDeclinedException:
-            ex = None
+        except CardDeclinedException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert',
                 'height': '250' })
             self.fail = True
-        except InvalidCouponException:
-            ex = None
+        except InvalidCouponException as ex:
             textlen = 333 + len(invalidUserCoupons) * 38
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert',
                 'height': str(textlen) })
             self.fail = True
-        except InvalidMemberException:
-            ex = None
+        except InvalidMemberException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
             self.fail = True
-        except ValidateCouponException:
-            ex = None
+        except ValidateCouponException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert',
                 'height': '250' })
             self.fail = True
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
 
 

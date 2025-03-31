@@ -63,8 +63,7 @@ class TestTakeInForm(BaseTakeInForm):
         
         try:
             BaseTakeInForm._run(self)
-        except Exception:
-            ex = None
+        except Exception as ex:
             
             try:
                 ec = ex.errCode

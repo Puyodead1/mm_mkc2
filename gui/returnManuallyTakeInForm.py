@@ -133,8 +133,7 @@ class ReturnManuallyTakeInForm(QtGui.QWidget):
             self.ui.frame.setStyleSheet('border: 2px solid #0153b0; border-radius: 5px')
             self.ui.frame.show()
             self.group.show()
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         
@@ -153,8 +152,7 @@ class ReturnManuallyTakeInForm(QtGui.QWidget):
                 
             
             self.icon_dvd.setPixmap(QtGui.QPixmap(pixmap))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         if os.path.isfile(data['movie_pic']):
@@ -236,7 +234,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'a' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/735.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/735.jpg',
             'is_bluray': '2' },
         {
             'feature': [
@@ -247,7 +245,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'b' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/737.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/737.jpg',
             'is_bluray': '2' },
         {
             'feature': [
@@ -258,7 +256,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'c' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
             'is_bluray': '2' },
         {
             'feature': [
@@ -269,7 +267,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'd' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
             'is_bluray': '2' },
         {
             'feature': [
@@ -280,7 +278,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'e' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/738.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/738.jpg',
             'is_bluray': '2' },
         {
             'feature': [
@@ -291,7 +289,7 @@ if __name__ == '__main__':
                 {
                     'aa': 'f' }],
             'rfid': '1',
-            'movie_pic': '/home/mm/var/images/goodsrec/images/740.jpg',
+            'movie_pic': '/home/puyodead1/var/images/goodsrec/images/740.jpg',
             'is_bluray': '2' }]
     form.ui.disc_out_list.setDiscList(data)
     sys.exit(app.exec_())

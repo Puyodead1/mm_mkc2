@@ -27,8 +27,7 @@ def backup(sourcePath, destPath):
         
         shutil.copy(sourcePath, destPath)
         status = 1
-    except Exception:
-        ex = None
+    except Exception as ex:
         msg = 'Error in backup: %s' % ex
 
     return (status, msg)
@@ -50,8 +49,7 @@ def main():
             log.info('Backup db to local successfully.')
         else:
             log.info('Backup db to local failed: %s' % msg)
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('Error when backup: %s' % ex)
 
 

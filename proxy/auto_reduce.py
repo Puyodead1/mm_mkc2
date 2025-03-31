@@ -104,14 +104,12 @@ class AutoReduction(threading.Thread):
                         
                     
                 
-        except IOError:
-            ex = None
+        except IOError as ex:
             self.log.error('reduceSalePrice in auto_reduce(IOError): %s' % str(ex))
             if str(ex).lower().find('broken pipe') >= 0:
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('reduceSalePrice in auto_reduce: %s' % str(ex))
 
 

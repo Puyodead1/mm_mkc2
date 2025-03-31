@@ -72,8 +72,7 @@ class ServerKioskSyncThread(object):
                         else:
                             print('Something wrong. Please try again.')
                             self.log.error('remote: %s' % result['zdata'])
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     self.log.error('resync db: %s' % str(ex))
 
             
@@ -100,8 +99,7 @@ class ServerKioskSyncThread(object):
             if not exist:
                 sql = 'CREATE TABLE server_queue\n(\n    id INTEGER,\n    type TEXT,\n    api TEXT,\n    params TEXT,\n    sequence_sensitive INTEGER,\n    add_time TEXT,\n    sync_time TEXT,\n    state INTEGER\n);'
                 self.syncDb.update(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = '_checkTableServerQueue: %s' % str(ex)
             self.log.error(msg)
 
@@ -135,14 +133,12 @@ class ServerKioskSyncThread(object):
                 
             else:
                 self.log.error('_downloadServerQueue: %s' % resultDic['zdata'])
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('_downloadServerQueue IOError: %s' % str(ex))
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = '_downloadServerQueue: %s' % str(ex)
             self.log.error(msg)
 
@@ -172,14 +168,12 @@ class ServerKioskSyncThread(object):
                 queue['api'] = api
                 queue['params'] = params
                 queue['sequence_sensitive'] = sequenceSensitive
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('_getNeedSyncQueueOne IOError: %s' % str(ex))
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = '_getNeedSyncQueueOne: %s' % str(ex)
             self.log.error(msg)
 
@@ -210,22 +204,19 @@ class ServerKioskSyncThread(object):
                         
                         self.log.info('success: %s' % queue['id'])
                         result = 1
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.log.error('error(%s): %s' % (queue['id'], str(ex)))
 
                 else:
                     self.log.error('No such method.')
             else:
                 self.log.error('No such method.')
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('_syncOneQueue IOError: %s' % str(ex))
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = '_syncOneQueue: %s' % str(ex)
             self.log.error(msg)
 
@@ -241,14 +232,12 @@ class ServerKioskSyncThread(object):
                 else:
                     sql = 'update server_queue set state=? where id=?;'
                 self.syncDb.update(sql, (state, syncId))
-            except IOError:
-                ex = None
+            except IOError as ex:
                 if str(ex).lower().find('broken pipe') > -1:
                     self.log.critical('_setSyncQueueStateById IOError: %s' % str(ex))
                     sys.exit()
                 
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Times %s: Error when setSyncQueueStateById to (%s) for %s: %s'
                 self.log.error(msg % (i, state, syncId, ex))
                 if i >= 4:
@@ -290,8 +279,7 @@ class LinuxCmd(object):
             else:
                 (w, r) = os.popen2(cmd)
                 result = r.read()
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = 'Error when execute cmd(%s): %s' % (cmd, str(ex))
 
         if hasattr(w, 'close'):

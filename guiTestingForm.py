@@ -310,8 +310,7 @@ class TestingForm(RobotForm):
                 self._exchangeToRack(101)
             
             self.nextWindowID = 'TestResultForm'
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             msg = _('Error happened when testing ... \n%s, %s\nLast Command: %s') % (ex.errCode, ex.message, self.lastCmd)
             self._setProcessText(msg)
             log.info(msg)

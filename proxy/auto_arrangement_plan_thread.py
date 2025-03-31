@@ -38,8 +38,7 @@ def _getPlans():
                 plan['state'] = row[5]
                 plans.append(plan)
             
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('_getPlans: %s' % str(ex))
 
     return plans
@@ -67,8 +66,7 @@ def _saveArrangeData(planId, data, processTime):
             connProxy.mkcDb.update(sql, (data, processTime))
         sql = 'UPDATE remote_arrangement_plans SET generate_time=? WHERE id=?;'
         connProxy.mkcDb.update(sql, (getCurTime(), planId))
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('_saveArrangeData: %s' % str(ex))
 
 
@@ -93,8 +91,7 @@ def _getSlots():
                 data['rfid_state'] = fmtNoneStr(rfidState)
                 slots.append(data)
             
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('_getSlots: %s' % str(ex))
 
     return slots
@@ -329,8 +326,7 @@ def _makeData(arrangeParams, arrangeDate, arrangeTime, generateTime, state):
                 (canSlots, notSlots) = _separateSlotsState(kioskSlots, fr.lower())
                 canSlots.sort(cmp = (lambda x, y: cmp(str(x['title']).lower(), str(y['title']).lower())), reverse = reverse)
                 slots = _arrangeSlots(canSlots, notSlots, fr)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 log.error("when sort_key is 'title' in _makeData: %s" % str(ex))
 
         elif sortKey == 'release_date':
@@ -354,8 +350,7 @@ def _makeData(arrangeParams, arrangeDate, arrangeTime, generateTime, state):
                 
                 canSlots.sort(cmp = (lambda x, y: cmp(str(x['release_date']).lower() + str(x['title']).lower(), str(y['release_date']).lower() + str(y['title']).lower())), reverse = reverse)
                 slots = _arrangeSlots(canSlots, notSlots, fr)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 log.error("when sort_key is 'release_date' in _makeData: %s" % str(ex))
 
         elif sortKey == 'disc_type':
@@ -390,8 +385,7 @@ def _makeData(arrangeParams, arrangeDate, arrangeTime, generateTime, state):
                 
                 canSlots.sort(cmp = (lambda x, y: cmp(x['sort'] + str(x['title']).lower(), y['sort'] + str(y['title']).lower())))
                 slots = _arrangeSlots(canSlots, notSlots, fr)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 log.error("when sort_key is 'disc_type' in _makeData: %s" % str(ex))
 
         elif sortKey == 'upc':
@@ -436,12 +430,10 @@ def _makeData(arrangeParams, arrangeDate, arrangeTime, generateTime, state):
                 
                 canSlots = frontSlots + backSlots
                 slots = _arrangeSlots(canSlots, notSlots, fr)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 log.error("when sort_key is 'upc' in _makeData: %s" % str(ex))
 
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('_makeData: %s' % str(ex))
 
     return slots

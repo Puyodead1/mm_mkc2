@@ -105,7 +105,7 @@ from . import chip_n_pin
 from .base_proxy import Proxy
 from .tools import getCurTime, RemoteError, getTimeChange, getLog
 from .tools import fmtMoney, sqlQuote
-from .clisitef import CliSiTef
+# from .clisitef import CliSiTef
 from .mda import DatabaseError, Db
 from .config import *
 from .credit_card import *
@@ -329,20 +329,17 @@ class UPGProxy(Proxy):
                 for disc in shoppingCart.discs
             )
             self.log.info(cartStr % (status, str(shoppingCart.id), shoppingCart.totalCharged, str(shoppingCart.coupon.couponCode), discStr))
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             errMsg = '[Local] Error occurs when preauth card (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '4'
             m = 'Sorry, the kiosk has communication issue.'
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             errMsg = '[Remote] Error occurs when preauth card (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '4'
             m = 'Sorry, the kiosk has communication issue.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] Error occurs when preauth card for ccId(%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '4'
@@ -387,8 +384,7 @@ class UPGProxy(Proxy):
             
             try:
                 para = self.getParamsForSA()
-            except Exception:
-                ex = None
+            except Exception as ex:
                 para = { }
                 self.log.error('Error when getParamsForSA: %s' % ex)
                 status = '2'
@@ -461,8 +457,7 @@ class UPGProxy(Proxy):
             elif status != '2':
                 status = '1'
                 m = 'Sorry, the payment params has NOT been set.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] Error occurs when sendReqForSA: %s' % ex
             self.log.error(errMsg)
             status = '3'
@@ -505,8 +500,7 @@ class UPGProxy(Proxy):
             
             try:
                 para = self.getParamsForSA()
-            except Exception:
-                ex = None
+            except Exception as ex:
                 para = { }
                 self.log.error('Error when getParamsForSA: %s' % ex)
                 status = '2'
@@ -653,26 +647,22 @@ class UPGProxy(Proxy):
             elif status != '2':
                 status = '1'
                 m = 'Sorry, the payment params has NOT been set.'
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             errMsg = '[Local] Error occurs when preauth card (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             errMsg = '[Remote] Error occurs when getResForSA (%s): %s' % (seq, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] Error occurs when getResForSA (%s): %s' % (seq, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] Error occurs when sendReqForSA: %s' % ex
             self.log.error(errMsg)
             status = '3'
@@ -750,50 +740,51 @@ class UPGProxy(Proxy):
         '''
         Charge the amount for chip n pin.
         '''
-        status = '1'
-        m = ''
-        (server, port, baseUrl) = self._getUpgServerFromUrl(self._getConfigByKey('upg_url'))
-        para = self.getParamsForSiTef()
-        obj = CliSiTef(para, self.kioskId, server, port, baseUrl)
-        result = obj.sale(acctId, amount)
-        self.log.info('Transaction result for SiTef: %s' % result)
-        if result.get('status', '') == 0:
-            status = '0'
-            card_num = '%s******%s' % (result.get('six_first_num', ''), result.get('last_four_num', ''))
-            customer.ccNum = card_num
-            customer.ccNumSHA1 = result.get('card_sha1', '')
-            customer.ccName = result.get('card_name', '')
-            customer.ccExpDate = result.get('card_expdate', '')
-            customer.ccDisplay = '%s (%s)' % (result.get('card_name', ''), result.get('last_four_num', ''))
-            customer.cardType = 4
-            oid = '%s--%s' % (result.get('trans_time', '')[4:], result.get('trans_doc', ''))
-            upgId = self.addToUpg({
-                'amount': fmtMoney(amount),
-                'oid': oid,
-                'resultCode': result.get('status', ''),
-                'resultMsg': result.get('msg', ''),
-                'trsType': 'SALE',
-                'acctId': acctId,
-                'ccId': customer.ccid,
-                'pqId': '',
-                'preauthMethod': 'CUSTOMER',
-                'notes': self.kioskId,
-                'additional': '' })
-            result['upgId'] = upgId
-            s = self.getCCInfoByCustomer(customer)
-            if s == 1:
-                raise Exception('Internal error in chargeForSiTef when getCCInfoByCustomer.')
-            elif s == 2:
-                raise RemoteError('Remote error in chargeForSiTef when getCCInfoByCustomer.')
+        # status = '1'
+        # m = ''
+        # (server, port, baseUrl) = self._getUpgServerFromUrl(self._getConfigByKey('upg_url'))
+        # para = self.getParamsForSiTef()
+        # obj = CliSiTef(para, self.kioskId, server, port, baseUrl)
+        # result = obj.sale(acctId, amount)
+        # self.log.info('Transaction result for SiTef: %s' % result)
+        # if result.get('status', '') == 0:
+        #     status = '0'
+        #     card_num = '%s******%s' % (result.get('six_first_num', ''), result.get('last_four_num', ''))
+        #     customer.ccNum = card_num
+        #     customer.ccNumSHA1 = result.get('card_sha1', '')
+        #     customer.ccName = result.get('card_name', '')
+        #     customer.ccExpDate = result.get('card_expdate', '')
+        #     customer.ccDisplay = '%s (%s)' % (result.get('card_name', ''), result.get('last_four_num', ''))
+        #     customer.cardType = 4
+        #     oid = '%s--%s' % (result.get('trans_time', '')[4:], result.get('trans_doc', ''))
+        #     upgId = self.addToUpg({
+        #         'amount': fmtMoney(amount),
+        #         'oid': oid,
+        #         'resultCode': result.get('status', ''),
+        #         'resultMsg': result.get('msg', ''),
+        #         'trsType': 'SALE',
+        #         'acctId': acctId,
+        #         'ccId': customer.ccid,
+        #         'pqId': '',
+        #         'preauthMethod': 'CUSTOMER',
+        #         'notes': self.kioskId,
+        #         'additional': '' })
+        #     result['upgId'] = upgId
+        #     s = self.getCCInfoByCustomer(customer)
+        #     if s == 1:
+        #         raise Exception('Internal error in chargeForSiTef when getCCInfoByCustomer.')
+        #     elif s == 2:
+        #         raise RemoteError('Remote error in chargeForSiTef when getCCInfoByCustomer.')
             
-            self.updateUpgInfoByUpgId({
-                'upgId': upgId,
-                'ccId': customer.ccid })
-        else:
-            status = result.get('status', '')
-            m = result.get('msg', '')
-        del obj
-        return (status, m, result)
+        #     self.updateUpgInfoByUpgId({
+        #         'upgId': upgId,
+        #         'ccId': customer.ccid })
+        # else:
+        #     status = result.get('status', '')
+        #     m = result.get('msg', '')
+        # del obj
+        # return (status, m, result)
+        raise NotImplementedError()
 
     
     def chargeForSiTef(self, customer, shoppingCart):
@@ -859,26 +850,22 @@ class UPGProxy(Proxy):
             else:
                 status = '5'
                 m = 'Sorry, the kiosk has not set any account.'
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             errMsg = '[Local] chargeForSiTef (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             errMsg = '[Local] chargeForSiTef (%s): %s' % (customer.ccid, traceback.format_exc())
             self.log.error(errMsg)
             status = '10'
             m = 'Sorry, the kiosk has communication issue.'
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             errMsg = '[Remote] chargeForSiTef (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] chargeForSiTef (%s): %s' % (customer.ccid, traceback.format_exc())
             self.log.error(errMsg)
             status = '9'
@@ -964,26 +951,22 @@ class UPGProxy(Proxy):
             else:
                 status = '5'
                 m = 'Sorry, the kiosk has not set any account.'
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             errMsg = '[Local] chargeForChipNPin (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             errMsg = '[Local] chargeForChipNPin (%s): %s' % (customer.ccid, traceback.format_exc())
             self.log.error(errMsg)
             status = '10'
             m = 'Sorry, the kiosk has communication issue.'
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             errMsg = '[Remote] chargeForChipNPin (%s): %s' % (customer.ccid, ex)
             self.log.error(errMsg)
             status = '9'
             m = 'Sorry, the kiosk has communication issue.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = '[Local] chargeForChipNPin (%s): %s' % (customer.ccid, traceback.format_exc())
             self.log.error(errMsg)
             status = '9'
@@ -1125,8 +1108,7 @@ class UPGProxy(Proxy):
                     status = 1
                 else:
                     status = 2
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = -1
             self.log.error('check_monthly_subscription: %s' % ex)
 
@@ -1226,16 +1208,13 @@ class UPGProxy(Proxy):
             result['upgId'] = upgId
             result['trsCode'] = params['resultCode']
             result['trsMsg'] = params['resultMsg']
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             errMsg = ''
             raise 
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             errMsg = ''
             raise 
-        except Exception:
-            ex = None
+        except Exception as ex:
             errMsg = ''
             raise 
 
@@ -1307,8 +1286,7 @@ class UPGProxy(Proxy):
                             trs_uuid = res['trsUuid']
                         
                         topup_queue_id = self._add_cerepay_topup_queue(acctId, cpInfo['id'], upgId, amount, oid, chargeCustomer.cardType, res['errCode'], res['errMsg'], trs_uuid)
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         topup_queue_id = self._add_cerepay_topup_queue(acctId, cpInfo['id'], upgId, amount, oid, chargeCustomer.cardType, -1, str(ex), '')
 
                     status = 0
@@ -1316,15 +1294,12 @@ class UPGProxy(Proxy):
                     status = 6
             else:
                 status = 5
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('topup_for_cerepay: %s' % ex)
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 2
             self.log.error('topup_for_cerepay(Remote): %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('topup_for_cerepay(Local): %s' % ex)
 
@@ -1351,8 +1326,7 @@ class UPGProxy(Proxy):
                     break
                 
                 time.sleep(1)
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = 1
             self.log.error('get_topup_status_by_queue_id: %s' % ex)
 
@@ -1380,12 +1354,10 @@ class UPGProxy(Proxy):
                 
             else:
                 result = 1
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             result = 2
             self.log.warning('chkNeedTrsPasswd: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = 1
             self.log.error('chkNeedTrsPasswd: %s' % ex)
 
@@ -1573,8 +1545,7 @@ class UPGProxy(Proxy):
                 self.syncData('add_cerepay_topup_queue', p)
             
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_add_cerepay_topup_queue: %s' % ex)
 
         return id_
@@ -1600,8 +1571,7 @@ class UPGProxy(Proxy):
                     'state': row[5] })
             
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_get_failed_cerepay_topup: %s' % ex)
 
         return topup
@@ -1633,8 +1603,7 @@ class UPGProxy(Proxy):
                     'cerepay_uuid': row[10] }
             
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_get_cerepay_topup_by_id: %s' % ex)
 
         return topup_info
@@ -1661,8 +1630,7 @@ class UPGProxy(Proxy):
             db.update(sql, p)
             del db
             self.syncData('update_cerepay_topup_queue', p)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_update_cerepay_topup_queue: %s' % ex)
 
 
@@ -1721,14 +1689,11 @@ class UPGProxy(Proxy):
             result['trsCode'] = tmp[0]
             result['trsMsg'] = tmp[1]
             result['oid'] = tmp[2]
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             raise 
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             raise 
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
 
         return result
@@ -1786,14 +1751,11 @@ class UPGProxy(Proxy):
             result['resultMsg'] = result['trsMsg']
             result['trsType'] = trsType
             upgId = self.updateUpgInfoByUpgId(result)
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             raise 
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             self.log.error('database error in sale: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
 
         return result
@@ -1848,8 +1810,7 @@ class UPGProxy(Proxy):
             else:
                 upgId = self.updateUpgInfoByUpgId(result)
             result['upgId'] = upgId
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             self.log.error('database error in sale: %s' % ex)
         except:
             raise 
@@ -1927,8 +1888,7 @@ class UPGProxy(Proxy):
             else:
                 status = 1
                 msg = trsMsg
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('saleForRentNBuyDisc: %s' % ex)
             status = -1
 
@@ -2064,12 +2024,10 @@ class UPGProxy(Proxy):
                     self._saveLocalCC(result)
                 else:
                     status = 1
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 2
             self.log.error('Remote Error in getCCInfoByCustomer: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('Internal Error in getCCInfoByCustomer: %s' % ex)
 
@@ -2365,8 +2323,7 @@ class UPGProxy(Proxy):
                 status = '9'
                 m = 'Denied transaction by chip'
                 return (str(status), m, smartEMV)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error(traceback.format_exc())
             status = 11
             m = 'card_reader is not connected'
@@ -2412,8 +2369,7 @@ class UPGProxy(Proxy):
                     smartEMV.GetCardHolderName(holderName)
                     smartEMV.GetServiceCode(serviceCode)
                     smartEMV.GetEntryMode(entryMode)
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     self.log.error(traceback.format_exc())
                     self.log.info('entryMode=======' + str(entryMode.value))
 
@@ -2424,8 +2380,7 @@ class UPGProxy(Proxy):
                     else:
                         emv_request = self.showTags(smartEMV)
                     smartEMV.GetTrackTwo(trackTwo)
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     self.log.error(traceback.format_exc())
 
                 smartEMV.SetResponseCode(0)
@@ -2563,8 +2518,7 @@ class PreauthQueue(object):
             try:
                 sql = 'delete from preauthq where id=:preauthqId;'
                 self.mkcDb.update(sql, params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == 4:
                     raise 
                 
@@ -2630,8 +2584,8 @@ class PreauthQueue(object):
                 params['syncType'] = 'rmexpired'
                 params['expiredDay'] = expiredDay
                 upgProxy.syncData('dbSyncPreauthq', params)
-        except Exception:
-            ex = None
+        except Exception as ex:
+            pass
 
 
 
@@ -2792,8 +2746,7 @@ class PostauthQueue(object):
                 params['trsIds'] = trsIds
                 upgProxy = UPGProxy.getInstance()
                 upgProxy.syncData('dbSyncPostauthqV3', params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == 4:
                     raise 
                 
@@ -2854,8 +2807,7 @@ class DeclinedQueue(object):
             try:
                 sql = 'delete from declinedq where id=:declinedqId;'
                 self.mkcDb.update(sql, params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == tries - 1:
                     raise 
                 
@@ -2877,8 +2829,7 @@ class DeclinedQueue(object):
             try:
                 sql = 'delete from declinedq where transaction_id IN %s;' % trsIdsStr
                 self.mkcDb.update(sql)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == tries - 1:
                     raise 
                 
@@ -2939,8 +2890,7 @@ class DeclinedQueue(object):
             try:
                 sql = 'update declinedq set amount=:amount, process_time=:process_time, next_process_time=:next_process_time, process_count=:process_count, state=:state, acct_id=:acct_id where id=:declinedqId;'
                 self.mkcDb.update(sql, params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == 4:
                     raise 
                 
@@ -3020,14 +2970,12 @@ class Preauth(Trade):
             trsType = 'PREAUTH'
             r = Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl, zipcode, trsPasswd)
             (trsCode, trsMsg, oid) = r
-        except UpgInternalError:
-            ex = None
+        except UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when preauth from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when preauth from UPG: %s' % ex
             trsMsg = m
@@ -3053,14 +3001,12 @@ class Postauth(Trade):
             trsType = 'POSTAUTH'
             r = Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
             (trsCode, trsMsg, oid) = r
-        except UpgInternalError:
-            ex = None
+        except UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when preauth from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when preauth from UPG: %s' % ex
             trsMsg = m
@@ -3086,14 +3032,12 @@ class Sale(Trade):
             trsType = 'SALE'
             r = Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid, ignore_bl)
             (trsCode, trsMsg, oid) = r
-        except UpgInternalError:
-            ex = None
+        except UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when preauth from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when preauth from UPG: %s' % ex
             trsMsg = m

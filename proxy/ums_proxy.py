@@ -138,8 +138,7 @@ class UmsProxy(Proxy):
             params['trs_list'] = trsList
             self.syncDataNoSequence('sendChargedReceiptForKiosk', params)
             status = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error in sendChargedReceipt for %s on %s: %s' % (trsList, shoppingCardId, ex))
 
         return str(status)
@@ -258,8 +257,7 @@ class UmsProxy(Proxy):
             self.syncDataNoSequence('addWannaSeeForKiosk', params)
             self.log.info('addWannaSeeForKiosk %s, %s' % (mail, upc))
             status = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Failed add wanna see for %s, %s: %s' % (mail, upc, ex))
 
         return str(status)
@@ -344,12 +342,10 @@ class UmsProxy(Proxy):
             
             self.chkMemberRating(memberRating, shoppingCart)
             self.setMonthlySubscptForMember(customer, info.get('month_subs', { }))
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = '2'
             self.log.error('Remote Error when setMemberDetail: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = '3'
             self.log.error('Internal Error when setMemberDetail: %s' % ex)
 
@@ -406,12 +402,10 @@ class UmsProxy(Proxy):
             customer.gender = gender
             self._setCustomerCerePayInfo(customer, cerepay)
             self.setMonthlySubscptForMember(customer, info.get('month_subs', { }))
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = '6'
             self.log.error('Remote Error when setMemberDetailByEmail: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = '7'
             self.log.error('Internal Error when setMemberDetailByEmail: %s' % ex)
 
@@ -474,12 +468,10 @@ class UmsProxy(Proxy):
                 coupons.append(coupon)
             
             status = 0
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 1
             self.log.error('getMemberCouponForKiosk remote error(%s): %s' % (customer.email, ex))
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 2
             self.log.error('getMemberCouponForKiosk internal error(%s): %s' % (customer.email, ex))
 
@@ -531,12 +523,10 @@ class UmsProxy(Proxy):
                     'is_bluray': (upc in blurayUpcs) & 1 })
             
             status = 0
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 1
             self.log.error('getMemberRecommendationForKiosk remote error(%s): %s' % (customer.email, ex))
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 2
             self.log.error('getMemberRecommendationForKiosk internal error(%s): %s' % (customer.email, ex))
 
@@ -640,12 +630,10 @@ class UmsProxy(Proxy):
             else:
                 status = 3
             del proxy
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 2
             self.log.error('checkEmailForCerePay: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('checkEmailForCerePay: %s' % ex)
 
@@ -706,12 +694,10 @@ class UmsProxy(Proxy):
             else:
                 status = 5
             del proxy
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 2
             self.log.error('getCardInfoForCerePay: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('getCardInfoForCerePay: %s' % ex)
 
@@ -792,12 +778,10 @@ class UmsProxy(Proxy):
             else:
                 status = 5
             del proxy
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             status = 2
             self.log.error('registerCerePayCard: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('registerCerePayCard: %s' % ex)
             status = 1
 
@@ -840,8 +824,7 @@ class UmsProxy(Proxy):
             
             try:
                 self.syncData('setMonthlySubscptForKiosk', params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if i == 1:
                     self.log.error('error in _setMonthlySubscptCount for %s: %s' % (trsId, ex))
                     raise 
@@ -872,8 +855,7 @@ class UmsProxy(Proxy):
         try:
             year = datetime.datetime.now().year
             age = year - int(birthYear)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when getAge: %s' % ex)
 
         return age

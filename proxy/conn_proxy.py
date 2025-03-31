@@ -119,7 +119,7 @@ class ConnProxy(Proxy):
         return cls._inst
 
     
-    def getInstance():
+    def getInstance() -> 'ConnProxy':
         return ConnProxy()
 
     getInstance = staticmethod(getInstance)
@@ -234,8 +234,7 @@ class ConnProxy(Proxy):
             result = self.mkcDb.query(sql, 'one')
             if result:
                 (slotId,) = result
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_getLoadSlotId: ' + str(ex))
 
         if not slotId and self._checkOverCapacityCount():
@@ -248,8 +247,7 @@ class ConnProxy(Proxy):
                 result = self.mkcDb.query(sql, 'one')
                 if result:
                     (slotId,) = result
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('_getLoadSlotId: ' + str(ex))
 
         
@@ -917,8 +915,8 @@ class ConnProxy(Proxy):
         try:
             sql = "ATTACH DATABASE '%s' AS UPCDB;" % config.UPC_DB_PATH
             self.mkcDb.update(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
+            pass
 
         blurayUpcs = self._getBlurayUpcs()
         sql = "SELECT title, movie_id, upc, (SELECT dvd_release_date FROM UPCDB.upc AS U WHERE U.upc=R.upc) AS release_date,sales_price FROM rfids AS R WHERE state IN ('in', 'unload', 'out') GROUP BY upc ORDER BY release_date DESC, title ASC;"
@@ -939,8 +937,8 @@ class ConnProxy(Proxy):
         try:
             sql = 'DETACH DATABASE UPCDB;'
             self.mkcDb.update(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
+            pass
 
         return movieList
 
@@ -1263,8 +1261,7 @@ class ConnProxy(Proxy):
             sql = "UPDATE rfids SET lock_by='', lock_time='', state=substr(state, 0, length(state)-5) WHERE lock_time<>'' AND lock_time IS NOT NULL AND state LIKE '%_lock' AND lock_time<STRFTIME('%Y-%m-%d %H:%M:%S', DATETIME('now', 'localtime'), '-10 minutes');"
             sqlList.append(sql)
             self.mkcDb.updateTrs(sqlList)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('resetAll: %s' % str(ex))
 
 
@@ -1960,8 +1957,7 @@ class ConnProxy(Proxy):
                     self.emailAlert('CLIENT', message, '', subject, MINICRITICAL)
                     self.log.info('send stockout alert for %s, %s' % (upc, title))
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('checkUPCStock: %s' % str(ex))
 
 
@@ -3556,6 +3552,10 @@ class ConnProxy(Proxy):
         startTime = str(getLinuxDate()).strip()
         kioskTimeZone = str(getTimeZone()).strip()
         capacityType = str(getKioskCapacity())
+        print(firmware)
+        print(startTime)
+        print(kioskTimeZone)
+        print(capacityType)
         sql = "UPDATE info SET value=? WHERE variable='KioskID';"
         self.mkcDb.update(sql, (self.kioskId,))
         sql = "UPDATE info SET value=? WHERE variable='IP';"
@@ -3691,8 +3691,7 @@ class ConnProxy(Proxy):
                             'kiosk_logo_md5': md5Server })
                     
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('getKioskLogo(remote): %s' % str(ex))
 
         logo = self._getConfigByKey('kiosk_logo')
@@ -3718,8 +3717,7 @@ class ConnProxy(Proxy):
         
         try:
             message = self._getConfigByKey('shopping_cart_message')
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('getShoppingCartMessage: %s' % str(ex))
 
         return message
@@ -3776,20 +3774,17 @@ class ConnProxy(Proxy):
             
             try:
                 self.syncDataNoSequence(funcName, params)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('emailAlert: %s' % str(ex))
 
         
 
     
     def verifyDb(self):
-        
         try:
             from . import db
             db.verifyDb()
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('verifyDb: %s' % str(ex))
 
 
@@ -3808,8 +3803,7 @@ class ConnProxy(Proxy):
                         latestVersion = data['version']
                     
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('when getLatestVersion: ' + str(ex))
 
         return latestVersion
@@ -3832,8 +3826,7 @@ class ConnProxy(Proxy):
                 if resultDic['result'].lower() == 'ok':
                     versionInfo = resultDic['zdata']
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('when getAutoUpdateLatestVersion: ' + str(ex))
 
         return versionInfo
@@ -3854,8 +3847,7 @@ class ConnProxy(Proxy):
             params = {
                 'rfid': rfid }
             self.syncData('dbSyncSetBadRfid', params)
-        except Exception:
-            ex = None
+        except Exception as ex:
             statusCode = '0'
             self.log.error('when setBadRfid: ' + str(ex))
 
@@ -3877,8 +3869,7 @@ class ConnProxy(Proxy):
             params = {
                 'slot_id': slotId }
             self.syncData('dbSyncSetBadSlot', params)
-        except Exception:
-            ex = None
+        except Exception as ex:
             statusCode = '0'
             self.log.error('when setBadSlot: ' + str(ex))
 
@@ -4003,8 +3994,7 @@ class ConnProxy(Proxy):
                             self.finishArrangement()
                         
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('when getArrangementPlan: ' + str(ex))
 
         return plan
@@ -4153,8 +4143,7 @@ class ConnProxy(Proxy):
                     
                 else:
                     self.log.error('error in getChannelForMachine(remote): %s' % resultDic['zdata'])
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in getChannelForMachine: %s' % str(ex))
 
         return channelInfo
@@ -4279,8 +4268,7 @@ class ConnProxy(Proxy):
                 else:
                     self.log.error('error in getKioskOffsetSettings(remote): %s' % resultDic['zdata'])
                     errorMsg = 'Fetching kiosk offset settings from server failed: %s' % resultDic['zdata']
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in getKioskOffsetSettings: %s' % str(ex))
             errorMsg = 'Fetching kiosk offset settings from server failed: %s' % str(ex)
 
@@ -4309,8 +4297,7 @@ class ConnProxy(Proxy):
                 'ExternalIP': externalIP }
             self.syncData('dbSyncInfo', {
                 'changes': changes })
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in setExternalIP: %s' % str(ex))
 
 
@@ -4328,8 +4315,7 @@ class ConnProxy(Proxy):
             self.mkcDb.update(sql, (status,))
             self.syncData('dbSyncHDMI', {
                 'status': status })
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in setHDMI: %s' % str(ex))
 
 
@@ -4350,8 +4336,7 @@ class ConnProxy(Proxy):
             params['start_time'] = startTime
             params['end_time'] = endTime
             self.syncData(funcName, params)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in saveCustomterBehavior: %s' % str(ex))
 
 
@@ -4366,8 +4351,7 @@ class ConnProxy(Proxy):
         try:
             sql = "INSERT INTO card_read(read_time, state) VALUES(DATETIME('now', 'localtime'), ?);"
             self.mkcDb.update(sql, (readState,))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in saveCardRead: %s' % str(ex))
 
 
@@ -4382,8 +4366,7 @@ class ConnProxy(Proxy):
         try:
             self.getRemoteData('downloadServerDB', {
                 'mac': getEthMac() })
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error in downloadServerDB: %s' % str(ex))
 
 

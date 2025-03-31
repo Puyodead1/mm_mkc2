@@ -86,25 +86,21 @@ class CerepayTopupSwipeCardBaseForm(CustomerForm):
             self.windowJump = True
             globalSession.isCerepayCardInfoDirty = True
             return None
-        except CerepayError:
-            ex = None
+        except CerepayError as ex:
             self.nextWindowID = 'CerepayTopupErrorForm'
             self.windowJump = True
             globalSession.isCerepayCardInfoDirty = True
             return None
-        except ChinPinTopupException:
-            ex = None
+        except ChinPinTopupException as ex:
             log.error(str(ex.message))
             log.error(traceback.format_exc())
             self._CerepayTopupSwipeCardBaseForm__show_message_box({
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except DebitCardTimeOut:
-            ex = None
+        except DebitCardTimeOut as ex:
             self.timeoutSec = 0
             log.error('getResForSA reach time out')
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error(str(ex))
             log.error(traceback.format_exc())
             self._CerepayTopupSwipeCardBaseForm__show_message_box({

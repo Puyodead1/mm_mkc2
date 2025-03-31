@@ -61,8 +61,7 @@ class DiscPriceForm(QtGui.QWidget):
         
         try:
             self.feature.setList(data['feature'])
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         
@@ -81,8 +80,7 @@ class DiscPriceForm(QtGui.QWidget):
                 
             
             self.ui.icon_dvd.setPixmap(QtGui.QPixmap(pixmap))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
 
@@ -107,7 +105,7 @@ class DiscPriceForm(QtGui.QWidget):
                 'terms': 'Terms and Conditions\nTo rent a DVD, Video Game or other product from this Automated Kiosk you must swipe your credit card.\nBy swiping your credit card you certify that you are the legal owner of the card that you are at least 18 years of age, and that you agree to all of the Terms and Conditions listed herein. If you are under the age of 18 you may only use this Kiosk with the express permission of a Parent or Guardian.\n\n1. You agree to pay the rental rates as listed on the kiosk screen.\n2. If we are required to collect Sales Taxes in your area, either on rental, purchase or applicable Maximum Replacement Cost, they are additional to the rental price and you understand and agree that they are automatically applied to your credit card over and above the value of the rental.\n3. You understand and agree that your credit card will be charged an additional period fee, as displayed on the kiosk screen, for each additional period you keep the DVD, Video Game or other product beyond the return time.\n4. The Rental Day Limit allowed for a rental is  ___  after which the rental is converted into a sale.\n                a. DVD - $30.00\n                b. Blu-Ray - $35.00\n                c. Video Game - $45.00\n5. If the rental day limit has been reached, you have purchased the DVD, or Video Game or other product and do not need to return it.  If you return the DVD, Video Game, or other product after the replacement cost has been charged, you agree and understand that no refund will be issued, but that we will mail that product to you upon written request and payment of delivery charges.\n6. If the DVD, Video Game or other product is returned Damaged, without the original box or other product or information included in the box you understand and agree that your Payment Card will be assessed additional charges up to the Maximum Replacement Cost of that DVD, Video Game or other product.\n7. If you reserve a DVD online, the reservation period begins immediately.  You have 12 hours to pick up your reserved DVD(s).  Your reservation will expire after 12 hours and you will be charged a one night rental fee for each reserved DVD.\n8. If you have questions, comments or concerns, please contact: the owner / operator.',
                 'dvd_version': '(Blu-ray)',
                 'movie_title': 'Night Train (2009) Automated Kiosk you must swipe your credit card.',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/111207_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/111207_big.jpg',
                 'feature': [
                     {
                         'price_plan_text': 'First 1 Hours Fee $10\n or Each 2 Hours Fee $100' },

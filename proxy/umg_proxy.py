@@ -78,8 +78,7 @@ class UmgProxy(Proxy):
                 self.log.info(msg % upc)
             mdq = MediaDownloadQueue()
             mdq.add(upc, state)
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = ''
             msg = 'Error occurs when get movie trailer for upc(%s): %s'
             self.log.error(msg % (upc, str(ex)))
@@ -111,8 +110,7 @@ class UmgProxy(Proxy):
                 mdq.removeByUpc(upc)
                 del mdq
                 result = '1'
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = '0'
             msg = 'Error in removeMovieTrailerByUpc for upc(%s): %s'
             self.log.error(msg % (upc, ex))
@@ -141,8 +139,7 @@ class UmgProxy(Proxy):
                 self.log.error(msg)
             else:
                 result = tmp['zdata']
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = []
             msg = 'Error in getHDTrailerForKiosk: %s' % ex
             self.log.error(msg)
@@ -169,8 +166,7 @@ class UmgProxy(Proxy):
                 raise Exception(tmp)
             
             channelXml = tmp['zdata']
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error in getChannelXmlForKiosk: %s' % ex)
 
         return channelXml

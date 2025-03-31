@@ -69,8 +69,7 @@ class VacuumUpcDbThread(threading.Thread):
                         self._vacuum()
                         self._set_last_vacuum_time(str(int(time.time())))
                         time.sleep(3600)
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.log.error('vacuum failed: %s' % ex)
 
         self.log.info('Thread end...')
@@ -86,8 +85,7 @@ class VacuumUpcDbThread(threading.Thread):
         try:
             fd = open(VACUUM_TIME_PATH)
             vacuum_time = int(fd.read().strip())
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_get_last_vacuum_time: %s' % ex)
         finally:
             if fd:
@@ -105,8 +103,7 @@ class VacuumUpcDbThread(threading.Thread):
         try:
             fd = open(VACUUM_TIME_PATH, 'w')
             fd.write(str(vacuum_time))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_set_last_vacuum_time: %s' % ex)
         finally:
             if fd:
@@ -137,8 +134,7 @@ class VacuumUpcDbThread(threading.Thread):
                 if vacuum_time_obj.strftime('%Y-%m') >= self.access_time.strftime('%Y-%m'):
                     need = False
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_need_vacuum: %s' % ex)
 
         return need

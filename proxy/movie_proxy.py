@@ -249,8 +249,7 @@ class MovieProxy(Proxy):
         try:
             print('from cache ....')
             rows = upcDb.query(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when get new release from cache table: %s' % ex)
 
         if not rows:
@@ -345,8 +344,8 @@ class MovieProxy(Proxy):
             upcDb = Db(UPC_DB_PATH)
             upcDb.update(sql)
             del upcDb
-        except Exception:
-            ex = None
+        except Exception as ex:
+            pass
 
 
     
@@ -384,8 +383,7 @@ class MovieProxy(Proxy):
                 'dvd_release_date': self._getDvdReleaseDate(r[11]),
                 'dvd_version': r[12],
                 'international_rating': '' } for r in rows ]
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('getMovieListByUpcListEspSyn: %s' % ex)
             raise 
 
@@ -513,8 +511,7 @@ class MovieProxy(Proxy):
             
             try:
                 (picMd5, picName) = self._savePicToDisk(tmp['picture'], tmp['movie_id'])
-            except Exception:
-                ex = None
+            except Exception as ex:
                 picName = self._formPicName(tmp['movie_id'])
 
             t['movie_release_year'] = fmtNoneStr(tmp['movie_release_year'])
@@ -581,8 +578,7 @@ class MovieProxy(Proxy):
             
             try:
                 (picMd5, picName) = self._savePicToDisk(tmp['picture'], tmp['movie_id'])
-            except Exception:
-                ex = None
+            except Exception as ex:
                 picName = self._formPicName(tmp['movie_id'])
 
             t['movie_release_year'] = fmtNoneStr(tmp['movie_release_year'])
@@ -740,8 +736,7 @@ def test():
             else:
                 '\n                python movie_proxy.py functionName [params, [params]...]\n                '
                 print(func(*params))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('=' * 12)
             print('Exception: ', ex)
             print('=' * 12)

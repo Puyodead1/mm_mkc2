@@ -23,10 +23,7 @@ from guiRobotForm import RobotForm
 from control import *
 from proxy.tools import getKioskCapacity, unlock
 
-try:
-    from sqlite3 import OperationalError
-except:
-    from pysqlite2.dbapi2 import OperationalError
+from sqlite3 import OperationalError
 
 from proxy.config import VIDEO_PATH
 log = initlog('guiBaseTakenInForm')
@@ -135,8 +132,7 @@ class BaseTakeInForm(RobotForm):
                     
                     try:
                         self._exchangeEject()
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         log.error('exchangeEject failed: %s' % str(ex))
 
                 
@@ -243,14 +239,12 @@ class BaseTakeInForm(RobotForm):
                     
                     try:
                         self._exchangeToRack()
-                    except InsertException:
-                        ex = None
+                    except InsertException as ex:
                         err_msg = str(ex)
                         self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                         log.error('_exchangeToRack: %s' % str(ex))
                         self._insertFailRecovery(ex)
-                    except RetrieveExchangeException:
-                        ex = None
+                    except RetrieveExchangeException as ex:
                         err_msg = str(ex)
                         self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                         log.error('_exchangeToRack: %s' % str(ex))
@@ -258,14 +252,12 @@ class BaseTakeInForm(RobotForm):
 
                     self._saveStatus()
                 self.nextWindowID = self.resultForm
-        except WrongInRfidError:
-            ex = None
+        except WrongInRfidError as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             log.error('[%s] - %s' % (self.windowID, ex))
             self.on_wrongInRfid(ex)
-        except SaveStatusError:
-            ex = None
+        except SaveStatusError as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             msg = _('Operation failed, the disc is ejecting back ...\nPlease retry in 5 minutes.')
@@ -274,8 +266,7 @@ class BaseTakeInForm(RobotForm):
             self.nextWindowID = self.ejectDiscBackForm
             globalSession.param['return_msg'] = ex.i18nmsg
             self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
-        except OperationalError:
-            ex = None
+        except OperationalError as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             msg = _('Operation failed, the disc is ejecting back ...\nPlease retry in 5 minutes.')
@@ -284,19 +275,16 @@ class BaseTakeInForm(RobotForm):
             self.nextWindowID = self.ejectDiscBackForm
             globalSession.param['return_msg'] = ex.i18nmsg
             self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
-        except InvalidDiscException:
-            ex = None
+        except InvalidDiscException as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             self.on_invalidDisc(ex)
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             self.addAlert(ERROR, ex.message)
             raise 
-        except Exception:
-            ex = None
+        except Exception as ex:
             err_msg = str(ex)
             self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
             raise 

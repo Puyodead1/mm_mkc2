@@ -62,32 +62,32 @@ if __name__ == '__main__':
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Chasing The Green (2009)' },
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' },
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' },
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' },
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' },
             {
                 'price': '$1.99',
                 'state': 'Close',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' }] }
     mainf.ui.ctr_disc_list.setList(data)
     mainf.setGeometry(0, 0, 768, 1024)

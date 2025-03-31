@@ -48,7 +48,7 @@ Change Log:
 '''
 __version__ = '0.5.2'
 import re
-from pysqlite2 import dbapi2 as sqlite
+import sqlite3 as sqlite
 from .conn_proxy import ConnProxy
 from .config import *
 from .tools import getKioskCapacity

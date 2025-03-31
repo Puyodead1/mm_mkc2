@@ -92,8 +92,7 @@ class ReturnTakeInForm(BaseTakeInForm):
             cart = ShoppingCart()
             self.returnType = str(self.connProxy.checkRfidAndSaveTrs(self.disc, cart))
             log.info('Disc title:%s' % self.disc.title)
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('[%s] Conn Proxy _verifyDisc Error:\n%s' % (self.windowID, traceback.format_exc()))
             msg = N_('Operation failed, please retry in 5 minutes.')
             raise SaveStatusError(msg)

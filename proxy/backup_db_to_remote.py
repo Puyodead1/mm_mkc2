@@ -67,10 +67,9 @@ def rsync(user, host, port, pwd, sourcePath, destPath, isDir = False, sync = Fal
     try:
         
         try:
-            os.remove('/home/mm/.ssh/known_hosts')
-        except Exception:
-            ex = None
-            log.info('Error when remove /home/mm/.ssh/known_hosts: %s' % ex)
+            os.remove('/home/puyodead1/.ssh/known_hosts')
+        except Exception as ex:
+            log.info('Error when remove /home/puyodead1/.ssh/known_hosts: %s' % ex)
 
         if isDir:
             cmd = "ssh %s@%s 'mkdir -p %s'" % (user, host, destPath)
@@ -160,8 +159,7 @@ def rsync(user, host, port, pwd, sourcePath, destPath, isDir = False, sync = Fal
             log.error('Child before message: %s' % msg)
             message = msg
         child.send('exit')
-    except Exception:
-        ex = None
+    except Exception as ex:
         status = 0
         log.error('Error in rsync(user:%s, host:%s, port:%s, sourcePath:%s, destPath:%s): %s' % (user, host, port, sourcePath, destPath, ex))
         message = 'Internal error: %s' % ex
@@ -205,8 +203,7 @@ def main():
                 log.info('Backup db to remote successfully.')
             else:
                 log.error('Backup db to remote failed: %s' % msg)
-    except Exception:
-        ex = None
+    except Exception as ex:
         log.error('Internal error when backup db error: %s' % ex)
 
 

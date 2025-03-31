@@ -139,8 +139,7 @@ class QuickLoadForm(RobotForm):
                 self._testOneSlot(slotID)
             
             self.nextWindowID = 'QuickLoadResultForm'
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             msg = _('Error happened when testing ... \n%s\nLast Command: %s') % (ex.i18nmsg, self.lastCmd)
             self._setProcessText(msg)
             log.info('[FatalError Happend]')

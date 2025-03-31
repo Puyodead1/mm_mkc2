@@ -14,18 +14,18 @@ import os
 import time
 
 # Must start before service.
-needStartThread = ["/home/mm/kiosk/mkc2/proxy/db_sync_thread.pyc", 
-                   "/home/mm/kiosk/mkc2/proxy/media_download_thread.pyc", 
-                   "/home/mm/kiosk/mkc2/proxy/upg_postauth_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/check_reserved_trs_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/manage_kiosk_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/auto_reduce.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/server_kiosk_sync_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/upc_db_updation_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/auto_arrangement_plan_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/topup_for_cerepay_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/vacuum_upc_db_thread.pyc",
-                   "/home/mm/kiosk/mkc2/proxy/upload_video_thread.pyc",
+needStartThread = ["/home/puyodead1/kiosk/mkc2/proxy/db_sync_thread.pyc", 
+                   "/home/puyodead1/kiosk/mkc2/proxy/media_download_thread.pyc", 
+                   "/home/puyodead1/kiosk/mkc2/proxy/upg_postauth_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/check_reserved_trs_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/manage_kiosk_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/auto_reduce.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/server_kiosk_sync_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/upc_db_updation_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/auto_arrangement_plan_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/topup_for_cerepay_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/vacuum_upc_db_thread.pyc",
+                   "/home/puyodead1/kiosk/mkc2/proxy/upload_video_thread.pyc",
                    ]
 
 class LinuxCmd(object):

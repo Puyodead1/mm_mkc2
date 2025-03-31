@@ -127,8 +127,7 @@ class RecoverTakeInForm(RobotForm):
             
             try:
                 self._readRfid()
-            except WrongOutRfidError:
-                ex = None
+            except WrongOutRfidError as ex:
                 log.info('[%s] - Read RFID failed.' % self.windowID)
                 return self.nextWindowID
             except InvalidDiscRfidError:
@@ -150,21 +149,17 @@ class RecoverTakeInForm(RobotForm):
             
             try:
                 self._exchangeToRack()
-            except InsertException:
-                ex = None
+            except InsertException as ex:
                 self._insertLoop()
 
             self._saveStatus()
-        except SaveStatusError:
-            ex = None
+        except SaveStatusError as ex:
             self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
             log.error('[%s] SaveStatusError:\n%s' % (self.windowID, traceback.format_exc()))
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             log.info('[%s] FatalError:\n%s' % (self.windowID, traceback.format_exc()))
             raise 
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.info('[%s] Exception:\n%s' % (self.windowID, traceback.format_exc()))
 
         return self.nextWindowID

@@ -161,7 +161,7 @@ class Register:
     def _syncDB(self, mac):
         try:
             proxy.db.verifyDb()
-            os.system("sqlite3 /home/mm/kiosk/var/db/sync.db \"UPDATE db_sync SET state=1 WHERE function_name<>'setMonthlySubscptForKiosk';\"")
+            os.system("sqlite3 /home/puyodead1/kiosk/var/db/sync.db \"UPDATE db_sync SET state=1 WHERE function_name<>'setMonthlySubscptForKiosk';\"")
             #serverCommand(CONN_SERVICE_URL, "resyncDb", timeout=180)
             self._uploadDB(mac)
         except:

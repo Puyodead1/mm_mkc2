@@ -18,7 +18,7 @@ import os
 import time
 import socket
 import select
-import simplejson as json
+import json
 import traceback
 from mcommon import QItem, initlog
 from mcommon import startHdmi
@@ -30,7 +30,7 @@ trace = initlog('UIPROXY', 'ui_proxy')
 
 def startGui():
     trace.info('[Start Qt GUI] ...')
-    cmd = 'DISPLAY=:0.0 %s > /home/mm/kiosk/var/log/qt_gui.log 2>&1 &' % QTGUI
+    cmd = 'DISPLAY=:0.0 %s > /home/puyodead1/kiosk/var/log/qt_gui.log 2>&1 &' % QTGUI
     os.system(cmd)
 
 
@@ -61,8 +61,7 @@ class JsonTrans(object):
             q_param = json.loads(json_data)
             q_type = q_param['type']
             item = QItem(q_type, None, None, q_param)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trace.info('[Json Trans to_queue] error: %s\ninput json data:%s' % (ex, json_data))
 
         return item
@@ -77,8 +76,7 @@ class JsonTrans(object):
             qdata['type'] = qitem.itemType
             qdata['id'] = qitem.identity
             json_data = json.dumps(qdata)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trace.info('[Json Trans to_json] error: %s\ninput qitem:%s' % (ex, qitem))
 
         return json_data
@@ -119,8 +117,7 @@ class UIListener(threading.Thread):
             self.sd.bind(('0', self.port))
             self.sd.listen(1)
             self.sock_ready = True
-        except Exception:
-            ex = None
+        except Exception as ex:
             trace.info('[UIListener __init__] init sock error: %s' % ex)
             self.sd = None
             self.cli_sd = None
@@ -142,8 +139,7 @@ class UIListener(threading.Thread):
                         
                         try:
                             self.to_mkc_Q.put(internal_error_qitem(qtype = 'EVENT', reason = 'init sock error'))
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             trace.error('[UIListener run] cannot write to_mkc_Q: %s' % ex)
 
                         time.sleep(1)
@@ -162,8 +158,7 @@ class UIListener(threading.Thread):
                     
                     try:
                         (stdin, stdou, stderr) = select.select(self.stdin_list, (), (), 1)
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         trace.error('[UIListener run] select failed. %s' % ex.message)
                         break
 
@@ -207,7 +202,7 @@ class UIListener(threading.Thread):
     
     def parseTcpStream(self, data = ''):
         ret = ''
-        self.msg += data
+        self.msg += data.encode()
         if self.msgLen == 0 and self.msg:
             
             try:
@@ -234,16 +229,14 @@ class UIListener(threading.Thread):
             
             try:
                 self.to_mkc_Q.put(internal_error_qitem('cannot convert json to queue'), timeout = 2)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trace.error('[UIListener process] cannot write to_mkc_Q: %s' % ex)
 
         else:
             
             try:
                 self.to_mkc_Q.put(qitem, timeout = 2)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trace.error('[UIListener process] cannot write to_mkc_Q: %s' % ex)
 
 
@@ -264,8 +257,7 @@ class UIListener(threading.Thread):
                 self.cli_sd.send(msg)
             else:
                 trace.error('[UIListener send_msg] client socket not ready')
-        except Exception:
-            ex = None
+        except Exception as ex:
             self._clientReady = False
             trace.info('[UIListener send_msg]ex=%s\ncannot send: %s' % (ex, repr(msg)))
             raise 
@@ -340,8 +332,7 @@ class MKCListener(threading.Thread):
                 tmp = internal_error_qitem(qtype = 'RESULT', reason = 'cannot convert qitem to json', identity = qitem.identity)
                 self.to_mkc_Q.put(tmp, timeout = 2)
                 return None
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trace.error('[MKCListener process] cannot write to_mkc_Q: %s' % ex)
                 return None
 
@@ -349,14 +340,12 @@ class MKCListener(threading.Thread):
         
         try:
             self.to_ui.send_msg(json_data)
-        except Exception:
-            ex = None
+        except Exception as ex:
             
             try:
                 tmp = internal_error_qitem(qtype = 'RESULT', reason = 'cannot send_msg to ui: %s' % ex, identity = qitem.identity)
                 self.to_mkc_Q.put(tmp, timeout = 2)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trace.error('[MKCListener process] cannot write to_mkc_Q: %s' % ex)
 
 
@@ -389,8 +378,7 @@ class MKCListener(threading.Thread):
                     ret_qitem.param = {
                         'errornum': rev,
                         'errorinfo': '' }
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trace.error('[MKCListener plugin_player] cannot check mplayer process')
                 ret_qitem.param = {
                     'errornum': '-99',
@@ -407,8 +395,7 @@ class MKCListener(threading.Thread):
         
         try:
             self.to_mkc_Q.put(ret_qitem, timeout = 2)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trace.error('[MKCListener plugin_player] cannot write to_mkc_Q: %s' % ex)
 
 

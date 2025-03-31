@@ -151,20 +151,17 @@ class PostauthThread(threading.Thread):
                 if not trsQ:
                     needPendingTrs = self.getNeedPendingTrs(curTime)
                 
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in processPendingTrs: %s' % str(ex))
             else:
                 self.log.error('Error occurs when get declined trs: %s' % str(ex))
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
             self.log.error('Error occurs when get pending trs: %s' % str(ex))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error occurs when process pending trs: %s' % traceback.format_exc())
 
 
@@ -193,20 +190,17 @@ class PostauthThread(threading.Thread):
                 if not trsQ:
                     declinedTrs = self.getDeclinedTrs(curTime)
                 
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in processDeclinedTrs: %s' % str(ex))
             else:
                 self.log.error('Error occurs when get declined trs: %s' % str(ex))
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
             self.log.error('Error occurs when get declined trs: %s' % str(ex))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error occurs when process declined trs: %s' % traceback.format_exc())
 
 
@@ -245,22 +239,18 @@ class PostauthThread(threading.Thread):
             del upg_proxy
             for trs_id in trs['trs_ids']:
                 self._remove_charge_cache(trs_id)
-        except IOError:
-            ex = None
+        except IOError as ex:
             raise 
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
             msg = 'Error occurs when process pending trs(%s): %s'
             self.log.error(msg % (trs, ex))
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             msg = 'Error occurs when process pending trs(%s): %s'
             self.log.error(msg % (trs, ex))
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = 'Error occurs when process pending trs(%s): %s'
             self.log.error(msg % (trs, traceback.format_exc()))
 
@@ -420,8 +410,7 @@ class PostauthThread(threading.Thread):
                         try:
                             result = upgProxy.sale(trs['acct_id'], trs['cc_id'], trs['amount'], '', cpc)
                             self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             if str(ex).find('_getCCInfoByCcId') == -1 and not cpc:
                                 self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
                             
@@ -433,8 +422,7 @@ class PostauthThread(threading.Thread):
                         try:
                             result = upgProxy.postauth(trs['amount'], trs['upg_id'], cpc)
                             self._setProcessCache(trs['cc_id'], trs['amount'], 'postauth')
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             if str(ex).find('_getCCInfoByCcId') == -1 and not cpc:
                                 self._setProcessCache(trs['cc_id'], trs['amount'], 'postauth')
                             
@@ -467,8 +455,7 @@ class PostauthThread(threading.Thread):
                         try:
                             result = upgProxy.sale(trs['acct_id'], trs['cc_id'], trs['amount'], '', cpc)
                             self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             if str(ex).find('_getCCInfoByCcId') == -1 and not cpc:
                                 self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
                             
@@ -536,8 +523,7 @@ class PostauthThread(threading.Thread):
                 try:
                     result = upgProxy.sale(trs['acct_id'], trs['cc_id'], trs['amount'], trs['upg_id'], cpc)
                     self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     if str(ex).find('_getCCInfoByCcId') == -1 and not cpc:
                         self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
                     
@@ -781,16 +767,14 @@ class PostauthThread(threading.Thread):
                 
                 try:
                     connProxy.updateTransactionsPostauth(trsIds, params)
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     if str(ex).find('database is locked') == -1:
                         raise 
                     
                     time.sleep(random.randint(1, 30))
 
             del connProxy
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).startswith('setStateForTrs') or str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             else:
@@ -826,22 +810,18 @@ class PostauthThread(threading.Thread):
             del upg_proxy
             for trs_id in trs['trs_ids']:
                 self._remove_charge_cache(trs_id)
-        except IOError:
-            ex = None
+        except IOError as ex:
             raise 
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
             msg = 'Error occurs when postauth for declined trs(%s): %s'
             self.log.error(msg % (str(trs), str(ex)))
-        except RemoteError:
-            ex = None
+        except RemoteError as ex:
             msg = 'Error occurs when postauth for declined trs(%s): %s'
             self.log.error(msg % (str(trs), str(ex)))
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = 'Error occurs when process for declined trs(%s): %s'
             self.log.error(msg % (str(trs), str(ex)))
 
@@ -982,8 +962,7 @@ class PostauthThread(threading.Thread):
             try:
                 result = upgProxy.sale(trs['acct_id'], trs['cc_id'], trs['amount'], trs['upg_id'], cpc)
                 self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
-            except Exception:
-                ex = None
+            except Exception as ex:
                 if str(ex).find('_getCCInfoByCcId') == -1 and not cpc:
                     self._setProcessCache(trs['cc_id'], trs['amount'], 'sale')
                 
@@ -1170,15 +1149,13 @@ class PostauthThread(threading.Thread):
             postauthq.add()
             result = postauthq.getNeedPostauth(delayHours = POSTAUTH_DELAY_HOURS)
             del postauthq
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in getNeedPendingTrs: %s' % str(ex))
                 sys.exit()
             else:
                 self.log.error('Error occurs when get pending trs: %s' % str(ex))
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
@@ -1224,15 +1201,13 @@ class PostauthThread(threading.Thread):
             (dayRate, totalDays) = self.getReprocessDeclinedConfig()
             result = declinedq.getDeclinedTrs(curTime, totalDays)
             del declinedq
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') > -1:
                 self.log.critical('Critical error in getDeclinedTrs: %s' % ex)
                 sys.exit()
             else:
                 self.log.error('Error occurs when get declined trs: %s' % str(ex))
-        except DatabaseError:
-            ex = None
+        except DatabaseError as ex:
             if str(ex).find('database disk image is malformed') > -1:
                 self._setPQLock(str(ex))
             
@@ -1267,14 +1242,12 @@ class PostauthThread(threading.Thread):
                                 break
                             else:
                                 raise Exception('Check ums proxy log.')
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             self.log.error('Time %s >> Error when sendChargedReceipt for %s on %s: %s' % (j + 1, result[shoppingCartId], ccId, ex))
 
                     
                 
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('Time %s >> Error when sendChargedReceipt for %s on %s: %s' % (i + 1, trsList, ccId, ex))
 
         
@@ -1336,8 +1309,7 @@ class PostauthThread(threading.Thread):
                 
                 try:
                     tpqCount = tpq.add(trsId)
-                except DatabaseError:
-                    ex = None
+                except DatabaseError as ex:
                     if str(ex).find('database is locked') == -1:
                         raise 
                     
@@ -1458,8 +1430,7 @@ class PostauthThread(threading.Thread):
             p['content'] = content
             self.log.info(content)
             (status, msg) = umsProxy.getRemoteData('sendMailUtils', p)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error when _sendMailFromUmsProxy: %s' % ex)
 
 
@@ -1471,8 +1442,7 @@ class PostauthThread(threading.Thread):
             self.log.info(content)
             connProxy.emailAlert('PRIVATE', content, 'developers@cereson.com', critical = connProxy.UNCRITICAL)
             del connProxy
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('error when _sendMailFromLocal: %s' % ex)
 
 
@@ -1520,20 +1490,17 @@ class PostauthThread(threading.Thread):
                                 upgProxy.updateUpgInfoByUpgId({
                                     'resultCode': '-1',
                                     'upgId': upgId })
-                            except Exception:
-                                ex = None
+                            except Exception as ex:
                                 self.log.error('_refundUnuseChipNPin update: %s' % ex)
                                 if str(ex).find('database is locked') == -1:
                                     raise 
                                 
                                 time.sleep(random.randint(1, 30))
 
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     self.log.error('_refundUnuseChipNPin %s: %s' % (upgId, traceback.format_exc()))
 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_refundUnuseChipNPin: %s' % ex)
 
 
@@ -1557,8 +1524,7 @@ class PostauthThread(threading.Thread):
                 totalDays = 7
             
             del upgProxy
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('getReprocessDeclinedConfig: %s' % ex)
 
         return (dayRate, totalDays)

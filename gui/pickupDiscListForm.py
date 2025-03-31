@@ -64,10 +64,10 @@ if __name__ == '__main__':
     data = {
         'ctr_dvd_list': [
             {
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Chasing The Green (2009)' },
             {
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/90990_big.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/90990_big.jpg',
                 'movie_title': 'Applause For Miss E (2009)' }] }
     mainf.ui.ctr_dvd_list.setDVDList(data)
     mainf.show()

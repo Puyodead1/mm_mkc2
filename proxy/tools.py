@@ -432,7 +432,7 @@ class Log:
             self.maxCount = COMMON_LOG_FILE_COUNT
         else:
             self.maxCount = maxCount
-        self.file = open(self.filePath, 'a', False)
+        self.file = open(self.filePath, 'a')
         self._lock = threading.Lock()
 
     
@@ -473,6 +473,7 @@ class Log:
 
     
     def _log(self, logType = 'INFO', msg = ''):
+        print(msg)
         logTime = self._getCurrTime('%y-%m-%d %H:%M:%S')
         logMsg = '%-18s%9s %10s %s\n' % (logTime, logType, self.user, msg)
         self._writeToFile(logMsg)
@@ -532,8 +533,7 @@ class Log:
                 
             else:
                 raise Exception('maxByte is %s' % str(self.maxBytes))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in _shouldRotateSize: ', str(ex))
 
         return should
@@ -546,8 +546,7 @@ class Log:
         try:
             if time.time() > self.rotateAt:
                 should = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in _shouldRotateDate: ', str(ex))
 
         return should
@@ -598,11 +597,10 @@ class Log:
                     os.remove(dfd)
                 
                 os.rename(self.filePath, dfd)
-                self.file = open(self.filePath, 'a', False)
+                self.file = open(self.filePath, 'a')
             else:
                 raise Exception('maxCount is %s' % str(self.maxCount))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in _fileRotateSize: ', str(ex))
 
 
@@ -640,12 +638,11 @@ class Log:
                     if not os.path.exists(dfn):
                         os.rename(self.filePath, dfn)
                     
-                self.file = open(self.filePath, 'a', False)
+                self.file = open(self.filePath, 'a')
                 self.rotateAt = time.mktime(time.strptime(self._getCurrTime('%Y-%m-%d 23:59:59'), '%Y-%m-%d %H:%M:%S'))
             else:
                 raise Exception('maxCount is %s' % str(self.maxCount))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in _fileRotateDate: ', str(ex))
 
 

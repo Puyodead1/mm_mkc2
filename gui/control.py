@@ -8,7 +8,7 @@ Main controler
 import os
 import select
 import time
-import simplejson as json
+import json
 from PyQt4 import QtCore, QtGui
 from squery import socketQuery
 
@@ -138,8 +138,7 @@ class MainControl(QtCore.QThread):
                             data = self.sock.sd.recv(int(length) - lenData)
                             lenData += len(data)
                             fullData = fullData + data
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         now = time.time()
                         error_count += 1
                         if not last_error_time or now - last_error_time > 10 * 60:
@@ -153,8 +152,7 @@ class MainControl(QtCore.QThread):
                     if fullData:
                         self.process(fullData)
                     
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.trace.error('[revData] [Error] when select/recv/process data: %s' % ex)
 
 
@@ -165,8 +163,7 @@ class MainControl(QtCore.QThread):
             
             try:
                 data = json.loads(jstring)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.trace.error('[process] [Error] Data from mkc is NOT valid JSON data! %s' % ex)
                 return -1
 
@@ -181,16 +178,14 @@ class MainControl(QtCore.QThread):
                     
                     try:
                         eval('self.' + str(cmd) + '(' + str(param) + ')')
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.trace.error('[process] [Error] when do command: %s' % ex)
 
                 else:
                     
                     try:
                         eval('self.' + cmd + '()')
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.trace.error('[process] [Error] when do command: %s' % ex)
 
             elif data['wid'] and data['cid']:
@@ -217,8 +212,7 @@ class MainControl(QtCore.QThread):
             else:
                 self.trace.error('[process] [Error]: Received Invalid Data! %s' % data)
                 return -1
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.trace.error('[process] [Error] : %s' % ex)
 
 

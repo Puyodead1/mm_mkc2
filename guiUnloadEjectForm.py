@@ -38,8 +38,7 @@ class UnloadEjectForm(BaseEjectForm):
         
         try:
             self.connProxy.saveUnloadStatus(disc)
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('[%s] Conn Proxy SAVE Status Error:\n%s' % (self.windowID, traceback.format_exc()))
             msg = N_('Operation failed, please manually put the disc back to slot %(slot)s , and retry in 5 minutes.')
             pm = {

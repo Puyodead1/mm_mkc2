@@ -442,23 +442,19 @@ class ConfigSmartLoadForm(ConfigForm):
                             self._saveStatus()
                         
                         self.slotleft -= 1
-                    except FatalError:
-                        ex = None
+                    except FatalError as ex:
                         self.finish = FATAL_ERROR
                         self.finalmsg = N_('Smart Load finished unsuccessfully.') + ex.message
                         log.error('[%s] %s:%s' % (self.windowID, ex.errCode, ex.message))
                         break
-                    except RetreiveNoDiscError:
-                        ex = None
+                    except RetreiveNoDiscError as ex:
                         log.info('[%s] %s' % (self.windowID, ex))
-                    except SaveStatusError:
-                        ex = None
+                    except SaveStatusError as ex:
                         self.finish = DB_ERROR
                         self.finalmsg = N_('Smart Load finished unsuccessfully.') + ex.message
                         log.error('[%s] %s' % (self.windowID, ex.message))
                         break
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.finish = UNKNOWN
                         self.finalmsg = N_('Smart Load finished unsuccessfully.') + ex.message
                         log.error('[%s] %s' % (self.windowID, ex.message))

@@ -36,8 +36,7 @@ class LoadTakeInForm(BaseTakeInForm):
         try:
             if self.loadSucess == True:
                 self.connProxy.saveLoadStatus(self.disc)
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('[%s] Conn Proxy SAVE Status Error:\n%s' % (self.windowID, traceback.format_exc()))
             msg = N_('DB operation failed, please manually take the disc back from slot %(slot)s, and retry in 5 minutes')
             pm = {
@@ -80,8 +79,7 @@ class LoadTakeInForm(BaseTakeInForm):
         
         try:
             returnType = str(self.connProxy.isRfidLoadable(self.disc))
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error('[%s] Conn Proxy isRfidLoadable Error:\n%s' % (self.windowID, traceback.format_exc()))
             msg = N_('DB operation failed, please manually take the disc from the exchange box, and retry in 5 minutes.')
             raise SaveStatusError(msg)

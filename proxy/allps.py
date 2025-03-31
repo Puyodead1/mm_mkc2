@@ -104,16 +104,13 @@ class Allps(object):
                 self.logout()
 
             status = 0
-        except socket.timeout:
-            ex = None
+        except socket.timeout as ex:
             status = 2
             self.log.error('Timeout when connect to the ftp server.')
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             status = 3
             self.log.error('Connection refused when connect to the ftp server: %s' % ex)
-        except ftplib.error_perm:
-            ex = None
+        except ftplib.error_perm as ex:
             lastresp = str(getattr(self.ftp, 'lastresp', None))
             self.log.info('lastresp: %s' % lastresp)
             if lastresp == '530':
@@ -123,12 +120,10 @@ class Allps(object):
             else:
                 status = 1
             self.log.error('Permission deny from ftp server: %s' % ex)
-        except IOError:
-            ex = None
+        except IOError as ex:
             status = 6
             self.log.error('IOError: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('Unknown error in setImpFile: %s' % ex)
 
@@ -240,16 +235,13 @@ class Allps(object):
                     
                 
             self.logout()
-        except socket.timeout:
-            ex = None
+        except socket.timeout as ex:
             status = 2
             self.log.error('Timeout when connect to the ftp server.')
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             status = 3
             self.log.error('Connection refused when connect to the ftp server: %s' % ex)
-        except ftplib.error_perm:
-            ex = None
+        except ftplib.error_perm as ex:
             lastresp = str(getattr(self.ftp, 'lastresp', None))
             self.log.info('lastresp: %s' % lastresp)
             if lastresp == '530':
@@ -259,12 +251,10 @@ class Allps(object):
             else:
                 status = 1
             self.log.error('Permission deny from ftp server: %s' % ex)
-        except IOError:
-            ex = None
+        except IOError as ex:
             status = 6
             self.log.error('IOError: %s' % ex)
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 1
             self.log.error('Unknown error in setImpFile: %s' % ex)
 
@@ -321,8 +311,7 @@ class Allps(object):
             try:
                 seq = fr.read().strip()
                 seq = int(seq) + 1
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('error in getSeq for (%s): %s' % (seq, ex))
                 seq = 1
             finally:
@@ -351,8 +340,7 @@ class Allps(object):
             try:
                 self.log.info('delete file: %s' % fn)
                 self.ftp.delete(fn)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('Delete file %s failed: %s' % (fn, ex))
 
         

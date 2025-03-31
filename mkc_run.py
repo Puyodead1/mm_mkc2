@@ -21,6 +21,7 @@ Change Log:
 # -----------------------------------------------------------------
 import os
 import signal
+import subprocess
 import sys
 import time
 
@@ -44,23 +45,19 @@ def getPid():
     returns the current Pid
     """
     cmd = "ps -eo pid,command | grep '^.*mkc_run.py *[test]*$'"
-    wfd, rfd = os.popen2(cmd)
-    try:
-        try:
-            lines = rfd.read().split('\n')
-            for line in lines:
-                pid = line.split()[0]
-                log.debug(("line pid", pid, line))
-                if os.getpid() != int(pid):
-                    log.debug(("none match", os.getpid(), pid))
-                    return pid
-            return None
-        except:
-            return None
-     
-    finally:
-        wfd.close()
-        rfd.close()
+    process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    stdout, _ = process.communicate()
+    
+    lines = stdout.split('\n')
+    for line in lines:
+        if not line.strip():
+            continue
+        pid = line.split()[0]
+        log.debug(("line pid", pid, line))
+        if os.getpid() != int(pid):
+            log.debug(("none match", os.getpid(), pid))
+            return pid
+    return None
 
 def stopMkc(chkLock):
     print('stopping mkc...')

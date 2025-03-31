@@ -22,7 +22,7 @@ class MainForm(QtGui.QMainWindow):
         self.setGeometry(0, 0, 768, 2024)
         self.setFixedSize(768, 2024)
         palette = QtGui.QPalette()
-        palette.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap('/home/mm/kiosk/var/gui/sys/remotely_maintaining.jpg')))
+        palette.setBrush(self.backgroundRole(), QtGui.QBrush(QtGui.QPixmap('/home/puyodead1/kiosk/var/gui/sys/remotely_maintaining.jpg')))
         self.setPalette(palette)
 
 

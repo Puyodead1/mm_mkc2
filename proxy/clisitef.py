@@ -115,8 +115,7 @@ class CliSiTef(credit_card.Trade):
                         self.log.info('removed %s' % f)
                     
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Regular Sitef log error %s' % ex)
 
 
@@ -135,14 +134,12 @@ class CliSiTef(credit_card.Trade):
             trsType = 'SALE'
             (trsCode, trsMsg, oid) = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, '', '')
             self.log.info('extra charge result: trsCode %s trsMsg %s oid %s' % (trsCode, trsMsg, oid))
-        except credit_card.UpgInternalError:
-            ex = None
+        except credit_card.UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when extracharge from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when extracharge from UPG: %s' % ex
             trsMsg = m
@@ -163,14 +160,12 @@ class CliSiTef(credit_card.Trade):
             trsType = 'CREDIT'
             (trsCode, trsMsg, oid) = credit_card.Trade.trade(self, acctId, trsType, cardNum, expDate, nameOnCard, amount, track2, track1, oid)
             self.log.info('cancel result: trsCode %s trsMsg %s oid %s' % (trsCode, trsMsg, oid))
-        except credit_card.UpgInternalError:
-            ex = None
+        except credit_card.UpgInternalError as ex:
             trsCode = '-1'
             m = 'Internal Error when cancel from UPG: %s' % ex
             trsMsg = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             trsCode = '-2'
             m = 'Local Error when cancel from UPG: %s' % ex
             trsMsg = m
@@ -223,8 +218,7 @@ class CliSiTef(credit_card.Trade):
                 else:
                     trsMsg_refund = 'refund success'
                     trsCode_refund = 0
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error(ex)
             self.log.info('refund result trsCode %s trsMsg %s' % (trsCode_refund, trsMsg_refund))
 
@@ -238,14 +232,12 @@ class CliSiTef(credit_card.Trade):
             
             try:
                 r = credit_card.Trade.trade(self, acctId, trsType, self.zdata.get('card_sha1', ''), self.zdata.get('card_expdate', ''), self.zdata.get('card_name', ''), amount, oid = oid)
-            except credit_card.UpgInternalError:
-                ex = None
+            except credit_card.UpgInternalError as ex:
                 trsCode = '-1'
                 m = 'Internal Error when sale from UPG: %s' % ex
                 trsMsg = m
                 self.log.error(m)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 trsCode = '-2'
                 m = 'Local Error when sale from UPG: %s' % ex
                 trsMsg = m

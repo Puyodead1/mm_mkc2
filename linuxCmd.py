@@ -58,11 +58,10 @@ def startHdmi():
     hdmi_port = get_hdmi_port()
     lock()
     if os.path.exists(os.path.join(KIOSK_HOME, 'kiosk/tmp/hdmimonitor.start')):
-        (w, r) = os.popen2('DISPLAY=:0.0 /usr/bin/xrandr -q | /bin/grep -i %s | /bin/grep -w -i connected' % hdmi_port)
-        data = r.read()
-        w.close()
-        r.close()
-        if data != '':
+        cmd = 'DISPLAY=:0.0 /usr/bin/xrandr -q | /bin/grep -i %s | /bin/grep -w -i connected' % hdmi_port
+        process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        stdout, stderr = process.communicate()
+        if stdout != '':
             if os.system('DISPLAY=:0.0 /usr/bin/xrandr --output %s --auto' % hdmi_port):
                 os.system('DISPLAY=:0.0 /usr/bin/xrandr --output %s --auto' % hdmi_port)
             
@@ -105,12 +104,12 @@ def changeHostName(name):
         os.system(cmd)
         cmd = 'cat /etc/hosts | grep -v S250 > /tmp/hosts.tmp;echo howcute121 | sudo -S mv /tmp/hosts.tmp /etc/hosts;echo howcute121 | sudo -S echo 127.0.0.1 ' + name + ' >> /etc/hosts'
         os.system(cmd)
-        (wfd, rfd) = os.popen2('hostname')
-        hostname = rfd.read().split('\n')
-        if hostname[0] == name:
-            return 1
-        else:
-            return 0
+        result = subprocess.run(['hostname'], 
+                          stdout=subprocess.PIPE, 
+                          stderr=subprocess.PIPE,
+                          text=True)
+        hostname = result.stdout.strip()
+        return 1 if hostname == name else 0
 
 
 def setSystemVolume(volume):

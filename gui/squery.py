@@ -3,7 +3,7 @@
 
 import socket
 import config_mkc
-import simplejson as json
+import json
 import sys
 
 class socketQuery:
@@ -20,8 +20,7 @@ class socketQuery:
         
         try:
             socketq.connect((config_mkc.HOST, config_mkc.PORT))
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.trace().error('[socketQuery] [Error] Can not connect: %s' % ex)
 
         self.sd = socketq
@@ -34,8 +33,7 @@ class socketQuery:
             socketq.send(str(len(data)) + '\n')
             socketq.send(data)
             self.trace().info('Sending data: %s' % data)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.trace().error('[socketQuery] Can not send: %s\nSend data: %s' % (ex, data))
 
 

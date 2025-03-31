@@ -71,67 +71,67 @@ if __name__ == '__main__':
                 'movie_title': 'Adam Ferrara: Funny As Hell (2009)',
                 'movie_release_year': '2009',
                 'upc': '014381533224',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/127810.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/127810.jpg' },
             {
                 'movie_title': 'Bled (2009)',
                 'movie_release_year': '2009',
                 'upc': '031398108276',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/128124.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/128124.jpg' },
             {
                 'movie_title': 'Boys Of Ghost Town (2008)',
                 'movie_release_year': '2008',
                 'upc': '735978440663',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/130536.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/130536.jpg' },
             {
                 'movie_title': 'Bride Wars (2009)',
                 'movie_release_year': '2009',
                 'upc': '024543579472',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/127538.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/127538.jpg' },
             {
                 'movie_title': 'Burrowers (2008)',
                 'movie_release_year': '2008',
                 'upc': '031398108375',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/128521.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/128521.jpg' },
             {
                 'movie_title': 'Caller (2008)',
                 'movie_release_year': '2008',
                 'upc': '829567060421',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/127841.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/127841.jpg' },
             {
                 'movie_title': 'Caprica (2009)',
                 'movie_release_year': '2009',
                 'upc': '025192019753',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/128790.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/128790.jpg' },
             {
                 'movie_title': 'Chandi Chowk To China (2009)',
                 'movie_release_year': '2009',
                 'upc': '883929049806',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/126376.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/126376.jpg' },
             {
                 'movie_title': 'Cloverfield (2008)',
                 'movie_release_year': '2008',
                 'upc': '032429061973',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/111207.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/111207.jpg' },
             {
                 'movie_title': 'Curious Case Of Benjamin Button (2008)',
                 'movie_release_year': '2008',
                 'upc': '097361430744',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/126739.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/126739.jpg' },
             {
                 'movie_title': 'Dante 01 (2008)',
                 'movie_release_year': '2008',
                 'upc': '796019817073',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/128539.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/128539.jpg' },
             {
                 'movie_title': 'Fired Up! (2009)',
                 'movie_release_year': '2009',
                 'upc': '043396272866',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/129404.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/129404.jpg' },
             {
                 'movie_title': 'Florence Nightingale (2008)',
                 'movie_release_year': '2008',
                 'upc': '043396272071',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/129529.jpg' }] }
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/129529.jpg' }] }
     mainf.ui.ctr_movie_list.setMovieList(data)
     sys.exit(app.exec_())
 

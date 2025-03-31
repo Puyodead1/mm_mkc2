@@ -92,13 +92,11 @@ class Trade(object):
             data = r.read()
             print(data)
             r.close()
-        except socket.timeout:
-            ex = None
+        except socket.timeout as ex:
             m = 'Time out when trade for machine %s: %s' % (self.machineId, str(ex))
             data = m
             self.log.error(m)
-        except Exception:
-            ex = None
+        except Exception as ex:
             m = 'http call exception for UPG: %s' % str(ex)
             data = m
             self.log.error(m)

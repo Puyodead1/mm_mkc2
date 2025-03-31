@@ -49,8 +49,7 @@ def setLastAccessTime():
                 f.close()
             
 
-    except Exception:
-        ex = None
+    except Exception as ex:
         print('Error in setLastAccessTime: %s' % ex)
 
 
@@ -69,8 +68,7 @@ def getLastAccessTime():
                 f.close()
             
 
-    except Exception:
-        ex = None
+    except Exception as ex:
         print('Error in getLastAccessTime: %s' % ex)
 
     return accessTime
@@ -105,8 +103,7 @@ class LinuxCmd(object):
             else:
                 (w, r) = os.popen2(cmd)
                 result = r.read()
-        except Exception:
-            ex = None
+        except Exception as ex:
             result = 'Error when execute cmd(%s): %s' % (cmd, str(ex))
 
         if hasattr(w, 'close'):
@@ -277,16 +274,14 @@ class KioskClient(Servant):
             else:
                 status = 3
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             if upgId != 0:
                 
                 try:
                     sql = 'DELETE FROM upg WHERE id=?;'
                     db.update(sql, (upgId,))
                     del db
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     print(ex)
 
             
@@ -429,8 +424,7 @@ class KioskClient(Servant):
                     else:
                         tmp['status'] = 3
                     del db
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     tmp['status'] = 0
                     tmp['msg'] = 'Error when reserve the disc: %s' % ex
 
@@ -438,16 +432,14 @@ class KioskClient(Servant):
             
             result['status'] = 1
             result['msg'] = 'Reserve successfully.'
-        except Exception:
-            ex = None
+        except Exception as ex:
             if upgId != 0:
                 
                 try:
                     sql = 'DELETE FROM upg WHERE id=?;'
                     db.update(sql, (upgId,))
                     del db
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     print(ex)
 
             
@@ -504,8 +496,7 @@ def needReconnect(pr):
             if time.time() - getLastAccessTime() >= NODE_HEART_BEAT * 10:
                 need = True
             
-    except Exception:
-        ex = None
+    except Exception as ex:
         print('Error when check if need reconnect: %s' % ex)
 
     return need
@@ -526,8 +517,7 @@ def readPid(filePath):
         fd = open(filePath)
         content = fd.read()
         pid = int(content.split('\n')[0])
-    except Exception:
-        ex = None
+    except Exception as ex:
         pid = ''
         print('Error when read pid: %s' % ex)
 
@@ -547,8 +537,7 @@ def killChild(parentPid = None):
                 
                 w.close()
                 r.close()
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error when kill child process: %s' % ex)
 
     
@@ -570,8 +559,7 @@ def main():
                 
                 try:
                     os.kill(pid, signal.SIGKILL)
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     print('Error when kill child process: %s' % ex)
 
 
@@ -596,8 +584,7 @@ def main():
                     else:
                         print('==============connected')
                         time.sleep(NODE_HEART_BEAT)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 print('===================Exception', ex)
                 ad = None
                 pr = None

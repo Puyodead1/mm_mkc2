@@ -62,8 +62,7 @@ class RemoteArrangementForm(RobotForm):
                 self.exchangeEmpty = False
             else:
                 self._rackToRack(fromSlot, toSlot)
-        except InsertException:
-            ex = None
+        except InsertException as ex:
             self.connProxy.setBadSlot(toSlot)
             if fromSlot == exchangeSlot:
                 
@@ -159,8 +158,7 @@ class RemoteArrangementForm(RobotForm):
             
             try:
                 self.moves(setp)
-            except RetreiveNoDiscError:
-                ex = None
+            except RetreiveNoDiscError as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 pm = {
@@ -168,29 +166,25 @@ class RemoteArrangementForm(RobotForm):
                 self.noDiscAlert(pm)
                 success = False
                 break
-            except RetreiveFailError:
-                ex = None
+            except RetreiveFailError as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 self.connProxy.emailAlert('PRIVATE', msg, critical = self.connProxy.UNCRITICAL)
                 success = False
                 break
-            except InsertException:
-                ex = None
+            except InsertException as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 self.connProxy.emailAlert('PRIVATE', msg, critical = self.connProxy.UNCRITICAL)
                 success = False
                 break
-            except FatalError:
-                ex = None
+            except FatalError as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 success = False
-                self.exceptions = ex
+                self.except ions = ex
                 break
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 self.connProxy.emailAlert('PRIVATE', msg, critical = self.connProxy.UNCRITICAL)
@@ -208,20 +202,17 @@ class RemoteArrangementForm(RobotForm):
                 self._goToExchange()
             
             self.connProxy.finishArrangement()
-        except (RetreiveNoDiscError, RetreiveFailError):
-            ex = None
+        except (RetreiveNoDiscError, RetreiveFailError) as ex:
             msg = 'Remote Arrange Failed, ' + ex.message
             log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
             self.connProxy.emailAlert('PRIVATE', msg, critical = self.connProxy.UNCRITICAL)
             success = False
-        except FatalError:
-            ex = None
+        except FatalError as ex:
             msg = 'Remote Arrange Failed, ' + ex.message
             log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
             success = False
-            self.exceptions = ex
-        except Exception:
-            ex = None
+            self.except ions = ex
+        except Exception as ex:
             msg = 'Remote Arrange Failed, ' + ex.message
             log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
             self.connProxy.emailAlert('PRIVATE', msg, critical = self.connProxy.UNCRITICAL)

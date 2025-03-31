@@ -172,8 +172,7 @@ def main():
             print('We want a digital.')
             print('=' * 10)
             op.print_help()
-    except Exception:
-        ex = None
+    except Exception as ex:
         print('Error ..... ', ex)
         print(op.print_help())
 

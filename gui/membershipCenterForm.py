@@ -148,23 +148,23 @@ if __name__ == '__main__':
             {
                 'upc': '23421345',
                 'movie_title': '30 MAN MNL LKJL Days Of Night (2007)',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/78268.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/78268.jpg' },
             {
                 'upc': '502194',
                 'movie_title': 'Agent Cody Banks 2 Destination London (2004)',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/23875.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/23875.jpg' },
             {
                 'upc': '23421345',
                 'movie_title': 'Agent Cody Banks 2 Destination London (2004)',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/78268.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/78268.jpg' },
             {
                 'upc': '502194',
                 'movie_title': 'Appaloosa (2008)',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/23875.jpg' },
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/23875.jpg' },
             {
                 'upc': '502194',
                 'movie_title': 'Appaloosa (2008)',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/23875.jpg' }] })
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/23875.jpg' }] })
     form.ui.ctr_movie_list.show()
     sys.exit(app.exec_())
 

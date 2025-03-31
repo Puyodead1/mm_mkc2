@@ -155,8 +155,7 @@ class RobotForm(MMForm):
         
         try:
             self._vomitDiscOnce()
-        except WrongOutRfidError:
-            ex = None
+        except WrongOutRfidError as ex:
             log.error('WrongOutRfidError, retry')
             self._vomitDiscOnce()
 
@@ -695,8 +694,7 @@ class RobotForm(MMForm):
             
             try:
                 self._carriageToRack()
-            except InsertException:
-                ex = None
+            except InsertException as ex:
                 log.error(str(ex))
                 continue
 

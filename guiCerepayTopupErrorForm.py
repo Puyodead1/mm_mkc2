@@ -43,9 +43,9 @@ class CerepayTopupErrorForm(CustomerForm):
                 globalSession.isCerepayCardInfoDirty = True
                 globalSession.cerepayTopupTransactionUUID = trs_uuid
                 return None
-        except Exception:
-            ex = None
-
+        except Exception as ex:
+            pass
+        
         self.on_btn_back_event()
         return None
 

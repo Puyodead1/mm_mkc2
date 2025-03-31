@@ -88,8 +88,7 @@ if __name__ == '__main__':
         ra.start()
         ra.run()
         ra.end()
-    except MkcLockException:
-        ex = None
+    except MkcLockException as ex:
         print(ex.message)
         sys.exit(-2)
     except:

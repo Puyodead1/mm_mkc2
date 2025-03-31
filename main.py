@@ -108,15 +108,16 @@ loadForms = set([
 log = initlog('main')
 
 class Main(object):
-    
+    connProxy: ConnProxy
+
     def __init__(self):
         ''' The self.forms set structure is import.
         Each of its component should related to a form Class which has the same name
         "MainForm" is the first page which must be implemented.
         '''
-        proxy.db.verifyDb()
         self.forms = loadForms
         self.connProxy = ConnProxy.getInstance()
+        self.connProxy.verifyDb()
         self._initForms()
         
         try:
@@ -124,7 +125,7 @@ class Main(object):
         except:
             pass
 
-        self.connProxy.setKioskInfo()
+        # self.connProxy.setKioskInfo()
         (self.rerr, self.rmsg) = initRobot()
         log.info('[Main run] ROBOT INIT: %s, %s' % (self.rerr, self.rmsg))
         (self.serr, self.smsg) = sensorDetect()

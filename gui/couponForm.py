@@ -79,7 +79,7 @@ class CouponForm(QtGui.QWidget):
                 {
                     'coupon_code': '55615632',
                     'description': 'First Night Free',
-                    'coupon_disc_pic': '/home/mm/kiosk/var/gui/pic/110228.jpg',
+                    'coupon_disc_pic': '/home/puyodead1/kiosk/var/gui/pic/110228.jpg',
                     'rfid': 'dszfdzshd',
                     'coupon_type': 'S' },
                 {
@@ -91,7 +91,7 @@ class CouponForm(QtGui.QWidget):
                 {
                     'coupon_code': '111112',
                     'rfid': '008CFC9415000104E0',
-                    'coupon_disc_pic': '/home/mm/kiosk/var/gui/pic/110255.jpg',
+                    'coupon_disc_pic': '/home/puyodead1/kiosk/var/gui/pic/110255.jpg',
                     'description': 'First Night 50% Off\nLast Day Free\n7.8% Off',
                     'coupon_type': 'S' }] }
         self.ui.ctr_coupon_info.setCouponInfo(data)

@@ -106,8 +106,7 @@ class DiscDetailForm(QtGui.QWidget):
         
         try:
             self.feature.setList(data['feature'])
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         
@@ -126,8 +125,7 @@ class DiscDetailForm(QtGui.QWidget):
                 
             
             self.ui.icon_dvd.setPixmap(QtGui.QPixmap(pixmap))
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         self.ui.synopsis.setText(data['synopsis'])
@@ -141,8 +139,7 @@ class DiscDetailForm(QtGui.QWidget):
                 self.ui.label_buy.show()
                 self.ui.buy_price.show()
                 self.ui.buy_price.setText(config.symbol + data['buy_price'])
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         
@@ -156,8 +153,7 @@ class DiscDetailForm(QtGui.QWidget):
                     self.ui.img_available_yes.setPixmap(QtGui.QPixmap(config.pic_available_no))
                     self.ui.label_available.setText(QtGui.QApplication.translate('Rent', 'NOT Available', None, QtGui.QApplication.UnicodeUTF8))
                     self.ui.label_available.setStyleSheet('color: #bb0000; font: bold 18px;')
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
         if os.path.isfile(data['movie_pic']):
@@ -185,8 +181,7 @@ class DiscDetailForm(QtGui.QWidget):
                 self.ui.frame.hide()
                 self.trailer = 0
                 print('[setMovieDetail] Warrning: No trailer!')
-        except Exception:
-            ex = None
+        except Exception as ex:
             print(ex)
 
 
@@ -196,14 +191,14 @@ class DiscDetailForm(QtGui.QWidget):
             'ctr_movie_detail': {
                 'rating': 'NR',
                 'dvd_version': '(HD)',
-                'trailer_name': '/home/mm/kiosk/var/gui/trailer/1015.flv',
+                'trailer_name': '/home/puyodead1/kiosk/var/gui/trailer/1015.flv',
                 'is_available': '1',
                 'dvd_release_date': '2009-07-07',
                 'synopsis': 'ALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJAALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJAALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJAALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJAALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJAALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJALAKSJDLKFJALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlskLAKSJDLKFJALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlsk',
                 'buy_price': '',
                 'rent_price': '30.00',
                 'directors': 'John Wayne Stevenson, Mark Randolph',
-                'movie_pic': '/home/mm/kiosk/var/gui/pic/36986.jpg',
+                'movie_pic': '/home/puyodead1/kiosk/var/gui/pic/36986.jpg',
                 'starring': 'LAKSJDLKFJALKSNDFLKAJS, kjlskjdfl,KAJSKLDJFKLAJSLKDFJAS, laskdjflajsdkfj,sd,fjsl,kajlskdfjlsk',
                 'genre': 'Action/Adventure',
                 'movie_title': 'Border Town (2009)NDFLKAJjdfl,KAJSKLDJFKLAJS',

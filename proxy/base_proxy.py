@@ -87,8 +87,7 @@ class Proxy(object):
                 self.UPG_SHOW_MODE = False
             else:
                 self.UPG_SHOW_MODE = True
-        except Exception:
-            ex = None
+        except Exception as ex:
             m = 'Error when get show_mode, upg_show_mode from config table: %s' % ex
             self.log.error(m)
 
@@ -314,8 +313,7 @@ class Proxy(object):
         try:
             sql = 'SELECT upc FROM bluray_upc WHERE upc IN %s;' % upcstr
             rows = upcDb.query(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when get bluray upc from table bluray_upc: %s' % ex)
             sql = "SELECT upc FROM upc WHERE upc IN %s AND dvd_version like '%%blu%%' and dvd_version like '%%ray%%';" % upcstr
             rows = upcDb.query(sql)
@@ -340,8 +338,7 @@ class Proxy(object):
         try:
             sql = 'SELECT upc FROM bluray_upc;'
             rows = upcDb.query(sql)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error when _getBlurayUpcs: %s' % ex)
             sql = "SELECT upc FROM upc WHERE dvd_version like '%%blu%%' and dvd_version like '%%ray%%';"
             rows = upcDb.query(sql)
@@ -363,8 +360,7 @@ class Proxy(object):
         
         try:
             return getKioskId()
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Failed to get kiosk id:' + str(ex))
             raise 
 
@@ -457,15 +453,14 @@ class Proxy(object):
                 
                 try:
                     result = eval(data)
-                except Exception:
-                    ex = None
+                except Exception as ex:
+                    pass
 
         except socket.timeout:
             result = {
                 'result': 'timeout',
                 'zdata': 'Connection timeout' }
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = str(ex)
             self.log.error('httpCall exception: ' + msg)
             result = {
@@ -496,15 +491,14 @@ class Proxy(object):
                 
                 try:
                     result = eval(data)
-                except Exception:
-                    ex = None
+                except Exception as ex:
+                    pass
 
         except socket.timeout:
             result = {
                 'result': 'timeout',
                 'zdata': 'Connection timeout' }
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = str(ex)
             self.log.error('httpCall exception: ' + msg)
             result = {

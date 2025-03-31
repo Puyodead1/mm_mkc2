@@ -2,12 +2,8 @@
 # File: mda.pyc (Python 2.5)
 
 
-try:
-    import sqlite3 as sqlite
-    from sqlite3 import DatabaseError
-except:
-    from pysqlite2 import dbapi2 as sqlite
-    from pysqlite2.dbapi2 import DatabaseError
+import sqlite3 as sqlite
+from sqlite3 import DatabaseError
 
 
 class Db(object):
@@ -96,8 +92,7 @@ class Db(object):
                     cur.execute(trs['sql'])
             
             self.con.commit()
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.con.rollback()
             raise 
         finally:

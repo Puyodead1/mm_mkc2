@@ -20,7 +20,7 @@
 import os
 import sys
 import time
-from . import uuid
+import uuid
 import threading
 from .tools import getCurTime, getTimeChange, getLog, sqlQuote, fmtMoney, isLocked
 from .config import *
@@ -166,8 +166,7 @@ class CheckReservedTrsThread(threading.Thread):
                                 if msExpiTime and msExpiTime >= curTime:
                                     umsProxy = UmsProxy.getInstance()
                                     umsProxy._setMonthlySubscptCount(msId, trsInfo['id'], outTime, ccId, ccDisplay)
-                            except Exception:
-                                ex = None
+                            except Exception as ex:
                                 f = open(RESERVE_SYNC_FAILED_RFID_FILE, 'w')
                                 f.write(str(rfid))
                                 f.close()
@@ -177,8 +176,7 @@ class CheckReservedTrsThread(threading.Thread):
                         
                     
                 
-        except IOError:
-            ex = None
+        except IOError as ex:
             if rfid:
                 f = open(RESERVE_SYNC_FAILED_RFID_FILE, 'w')
                 f.write(str(rfid))
@@ -188,8 +186,7 @@ class CheckReservedTrsThread(threading.Thread):
             if str(ex).lower().find('broken pipe') >= 0:
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('checkReserved in check_reserved: %s' % str(ex))
 
 
@@ -270,21 +267,18 @@ class CheckReservedTrsThread(threading.Thread):
                                 'convert_list': convertList,
                                 'rfid_list': rfidList }
                             self.proxy.syncData('dbSyncSaleConvertV2', params)
-                        except Exception:
-                            ex = None
+                        except Exception as ex:
                             self.log.error('checkSaleConvertTrs in check_reserved(%s): %s' % (i, str(ex)))
                             print(str(ex))
                             time.sleep(5)
 
                     
                 
-        except IOError:
-            ex = None
+        except IOError as ex:
             if str(ex).lower().find('broken pipe') >= 0:
                 sys.exit()
             
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('checkSaleConvertTrs in check_reserved: %s' % str(ex))
             print(str(ex))
 

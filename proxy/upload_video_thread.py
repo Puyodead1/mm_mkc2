@@ -40,8 +40,7 @@ class UploadVideoThread(threading.Thread):
         
         try:
             self.http_timeout = DEFAULT_SOCKET_TIMEOUT
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.http_timeout = 300
 
 
@@ -115,8 +114,7 @@ class UploadVideoThread(threading.Thread):
             try:
                 sql = 'UPDATE failed_trs SET state=? WHERE id=?;'
                 self.mkc_db.update(sql, (state, upload_id))
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Times %s: Error when set_upload_state_by_id to (%s) for %s: %s'
                 self.log.error(msg % (i, state, upload_id, ex))
                 if i >= 4:
@@ -134,8 +132,7 @@ class UploadVideoThread(threading.Thread):
             try:
                 sql = 'DELETE FROM failed_trs WHERE id=?;'
                 self.mkc_db.update(sql, (upload_id,))
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Times %s: Error when del_upload_by_id %s: %s'
                 self.log.error(msg % (i, upload_id, ex))
                 if i >= 4:
@@ -153,8 +150,7 @@ class UploadVideoThread(threading.Thread):
             try:
                 sql = "INSERT INTO db_sync(function_name, port_num, params, add_time) VALUES('db_sync_failed_trs', ?, ?, ?);"
                 self.sync_db.update(sql, (PROXY_DATA['CONN_PROXY']['SYNC_PORT'], repr(params), getCurTime()))
-            except Exception:
-                ex = None
+            except Exception as ex:
                 msg = 'Times %s: Error when add_sync: %s'
                 self.log.error(msg % (i, ex))
                 if i >= 4:
@@ -182,8 +178,7 @@ class UploadVideoThread(threading.Thread):
                         self.log.info('Removed dir %s' % itm)
                     
                 
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('Error in clear_videos: %s' % ex)
 
 
@@ -205,10 +200,9 @@ class UploadVideoThread(threading.Thread):
         try:
             
             try:
-                os.remove('/home/mm/.ssh/known_hosts')
-            except Exception:
-                ex = None
-                self.log.info('Error when remove /home/mm/.ssh/known_hosts: %s' % ex)
+                os.remove('/home/puyodead1/.ssh/known_hosts')
+            except Exception as ex:
+                self.log.info('Error when remove /home/puyodead1/.ssh/known_hosts: %s' % ex)
 
             if isDir:
                 cmd = "ssh %s@%s 'mkdir -p %s'" % (user, host, destPath)
@@ -298,8 +292,7 @@ class UploadVideoThread(threading.Thread):
                 self.log.error('Child before message: %s' % msg)
                 message = msg
             child.send('exit')
-        except Exception:
-            ex = None
+        except Exception as ex:
             status = 0
             self.log.error('Error in rsync(user:%s, host:%s, port:%s, sourcePath:%s, destPath:%s): %s' % (user, host, port, sourcePath, destPath, ex))
             message = 'Internal error: %s' % ex
@@ -335,18 +328,15 @@ class UploadVideoThread(threading.Thread):
             r = http.getresponse()
             data = r.read()
             result = eval(data)
-        except socket.timeout:
-            ex = None
+        except socket.timeout as ex:
             result = {
                 'result': 'timeout',
                 'zdata': 'Connection timeout' }
-        except socket.error:
-            ex = None
+        except socket.error as ex:
             result = {
                 'result': 'socketerror',
                 'zdata': 'Connection Refused' }
-        except Exception:
-            ex = None
+        except Exception as ex:
             msg = str(ex)
             self.log.error('httpCall exception: ' + msg)
             result = {

@@ -39,7 +39,7 @@ ERROR_BG = os.path.join(KIOSK_HOME, "kiosk/var/gui/sys/bg_outofservice.png")
 FACTORY_BG = os.path.join(KIOSK_HOME, "kiosk/var/gui/sys/remotely_maintaining.jpg")
 
 LOG_FILE = os.path.join(KIOSK_HOME, "kiosk/var/log/mkc_daemon.log")
-CURRENT_FORM = "DISPLAY=:0.0 xset -b; DISPLAY=:0.0 scrot /home/mm/kiosk/tmp/current_form.jpg"
+CURRENT_FORM = "DISPLAY=:0.0 xset -b; DISPLAY=:0.0 scrot /home/puyodead1/kiosk/tmp/current_form.jpg"
 
 def initlog():
     logger = logging.getLogger('MKC_DAEMON')
@@ -205,7 +205,7 @@ def createDaemon():
         sys.exit(1)
     
     # it separates the son from the father
-    os.chdir("/home/mm/kiosk/mkc2")
+    os.chdir("/home/puyodead1/kiosk/mkc2")
     os.setsid()
     os.umask(0)
     
@@ -287,7 +287,7 @@ def checkLoop():
                         mail_submit += 1 
                         connProxy.emailAlert("PRIVATE", msg, "developers@cereson.com", subject="Notification - %s - Restart" % connProxy.kioskId,\
                                 critical=connProxy.UNCRITICAL)
-                    os.system("cd /home/mm/kiosk/var/log/; cp qt_gui.log qt_gui.log.crash.%s" % time.strftime("%y%m%d%H%M"))
+                    os.system("cd /home/puyodead1/kiosk/var/log/; cp qt_gui.log qt_gui.log.crash.%s" % time.strftime("%y%m%d%H%M"))
                     restartMkc(False)
                     continue
                 if check_gui == False:
@@ -295,13 +295,13 @@ def checkLoop():
                     time.sleep(30)
                 else:
                     os.system(CURRENT_FORM)
-                    if compare_tow_image_file(ERROR_BG, "/home/mm/kiosk/tmp/current_form.jpg"):
+                    if compare_tow_image_file(ERROR_BG, "/home/puyodead1/kiosk/tmp/current_form.jpg"):
                         msg = "found guipid but gui crashed, restart it! " + time.strftime("%Y-%m-%d %H:%M:%S")
                         log.info(msg)
                         if mail_submit < 3:
                             mail_submit += 1 
                             connProxy.emailAlert("PRIVATE", msg, "developers@cereson.com", critical=connProxy.UNCRITICAL)
-                        os.system("cd /home/mm/kiosk/var/log/; cp qt_gui.log qt_gui.log.crash.%s" % time.strftime("%y%m%d%H%M"))
+                        os.system("cd /home/puyodead1/kiosk/var/log/; cp qt_gui.log qt_gui.log.crash.%s" % time.strftime("%y%m%d%H%M"))
                         restartMkc(False)
                         continue
                 

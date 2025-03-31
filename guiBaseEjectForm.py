@@ -187,8 +187,7 @@ class BaseEjectForm(RobotForm):
         
         try:
             self._rackToRack('223', '-1')
-        except (RetreiveNoDiscError, RetreiveFailError):
-            ex = None
+        except (RetreiveNoDiscError, RetreiveFailError) as ex:
             msg = N_('Retrieve disc from exchange box to carriage failed. Please contact our tech support.')
             raise FatalError(msg, { }, exin.errCode)
 
@@ -207,8 +206,7 @@ class BaseEjectForm(RobotForm):
         
         try:
             self._carriageToRack()
-        except RetrieveExchangeException:
-            ex = None
+        except RetrieveExchangeException as ex:
             raise FatalError(ex.rawmsg, ex.param, ex.errCode)
         except InsertException:
             self._insertLoop()
@@ -280,8 +278,7 @@ class BaseEjectForm(RobotForm):
                 try:
                     self._rackToExchange()
                     self._vomitDisc()
-                except InsertException:
-                    ex = None
+                except InsertException as ex:
                     err_msg = str(ex)
                     self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                     log.error('_rackToExchange: %s' % str(ex))
@@ -292,8 +289,7 @@ class BaseEjectForm(RobotForm):
                 if success == True:
                     self.shoppingCart.ejectDisc(rfid)
                     self._saveStatus(disc)
-            except RetreiveNoDiscError:
-                ex = None
+            except RetreiveNoDiscError as ex:
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 rfid = self.connProxy.getRfidBySlotId(self.disc.slotID)
@@ -305,8 +301,7 @@ class BaseEjectForm(RobotForm):
                 log.error('[%s] - %s' % (self.windowID, ex))
                 self._setProcessText(ex.i18nmsg)
                 globalSession.param['eject_result'] += ex.i18nmsg + '\n'
-            except RetreiveFailError:
-                ex = None
+            except RetreiveFailError as ex:
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 rfid = self.connProxy.getRfidBySlotId(self.disc.slotID)
@@ -319,32 +314,27 @@ class BaseEjectForm(RobotForm):
                 self._setProcessText(ex.i18nmsg)
                 globalSession.param['eject_result'] += ex.i18nmsg + '\n'
                 self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
-            except WrongOutRfidError:
-                ex = None
+            except WrongOutRfidError as ex:
                 log.error('[%s] - %s' % (self.windowID, ex))
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 self.on_wrongOutRfid(ex)
-            except InvalidDiscException:
-                ex = None
+            except InvalidDiscException as ex:
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 self.on_invalidDiscException(ex)
-            except SaveStatusError:
-                ex = None
+            except SaveStatusError as ex:
                 globalSession.param['eject_result'] += ex.i18nmsg + '\n'
                 self.connProxy.emailAlert('PRIVATE', ex.message, critical = self.connProxy.UNCRITICAL)
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
-            except FatalError:
-                ex = None
+            except FatalError as ex:
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 self.addAlert(ERROR, ex.message)
                 self.dbSync()
                 raise 
-            except Exception:
-                ex = None
+            except Exception as ex:
                 err_msg = str(ex)
                 self.save_failed_trs(self.disc, err_msg, db_action_time, action_type, today, vname, kiosk_id)
                 self.dbSync()

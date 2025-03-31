@@ -74,8 +74,7 @@ class CerepayTopupReceiptForm(CustomerForm):
         try:
             upg_proxy = UPGProxy()
             upg_proxy.send_topup_receipt(globalSession.cerepayTopupTransactionUUID)
-        except Exception:
-            ex = None
+        except Exception as ex:
             log.error(str(ex))
             log.error(traceback.format_exc())
 

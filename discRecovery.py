@@ -58,11 +58,11 @@ class CheckBase(object):
     
     def _stopMkc(self):
         self.log.info("Stop MKC.")
-        os.system("cd /home/mm/kiosk/mkc2;./mkc.py stop")
+        os.system("cd /home/puyodead1/kiosk/mkc2;./mkc.py stop")
     
     def _startMkc(self):
         self.log.info("Start MKC.")
-        os.system("cd /home/mm/kiosk/mkc2;./mkc.py start")
+        os.system("cd /home/puyodead1/kiosk/mkc2;./mkc.py start")
     
     def _isMkcLock(self):
         ret = tools.isLocked()

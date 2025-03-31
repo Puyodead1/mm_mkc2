@@ -126,8 +126,7 @@ class UpcDbUpdationThread(threading.Thread):
                 self._integrateUpcDb()
             
             state = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             state = 0
             self.log.error('_upToDate: %s' % ex)
 
@@ -197,8 +196,7 @@ class UpcDbUpdationThread(threading.Thread):
             if not rtReq:
                 self._integrateUpcDb()
                 state = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             state = 0
             self.log.error('_updateRt: %s' % ex)
 
@@ -263,8 +261,7 @@ class UpcDbUpdationThread(threading.Thread):
                 shutil.rmtree(picDir)
             
             state = 1
-        except Exception:
-            ex = None
+        except Exception as ex:
             state = 0
             self.log.error('_updateToVersion(%s): %s' % (ver, ex))
 
@@ -337,8 +334,7 @@ class UpcDbUpdationThread(threading.Thread):
             sql = "ALTER TABLE new_release_cache ADD COLUMN ext5 TEXT DEFAULT '';"
             sqls.append(sql)
             db.updateTrs(sqls)
-        except Exception:
-            ex = None
+        except Exception as ex:
 
         del db
 
@@ -352,8 +348,7 @@ class UpcDbUpdationThread(threading.Thread):
             db = Db(dbDir)
             if db.query('SELECT COUNT(id) FROM update_info;', 'one'):
                 init = True
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_isInit: %s' % ex)
 
         del db
@@ -373,8 +368,7 @@ class UpcDbUpdationThread(threading.Thread):
                 versions = result['zdata']
             else:
                 self.log.error('_getUpdateVersions: %s' % result)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_getUpdateVersions: %s' % ex)
 
         return versions
@@ -390,8 +384,7 @@ class UpcDbUpdationThread(threading.Thread):
                 verInfo = result['zdata']
             else:
                 self.log.error('_getRealtimeVersions: %s' % result)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_getRealtimeVersions: %s' % ex)
 
         return verInfo
@@ -423,8 +416,7 @@ class UpcDbUpdationThread(threading.Thread):
             row = db.query(sql, 'one')
             if row:
                 (latest,) = row
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_getLatestVersion: %s' % ex)
 
         del db
@@ -448,8 +440,7 @@ class UpcDbUpdationThread(threading.Thread):
                 tmp['realtime_id'] = realtime_id
                 tmp['success'] = success
                 result.append(tmp)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.error('_getRealtimeRequest: %s' % ex)
 
         return result
@@ -475,8 +466,7 @@ class UpcDbUpdationThread(threading.Thread):
             else:
                 hd = now + datetime.timedelta(seconds = 60)
             hdTime = hd.strftime('%H:%M')
-        except Exception:
-            ex = None
+        except Exception as ex:
             print('Error in getUpdateTime: %s' % ex)
 
         return hdTime
@@ -529,8 +519,7 @@ class UpcDbUpdationThread(threading.Thread):
                     os.remove(flPath)
                     m = 'Download file md5: %s, original file md5: %s'
                     self.log.error(m % (flMd5, fileMd5))
-        except Exception:
-            ex = None
+        except Exception as ex:
             state = 'failed'
             msg = 'Error when download media (%s) to path %s: %s'
             self.log.error(msg % (fileName, filePath, ex))
@@ -551,8 +540,7 @@ class UpcDbUpdationThread(threading.Thread):
             mf.update(f.read())
             f.close()
             fileMd5 = mf.hexdigest()
-        except Exception:
-            ex = None
+        except Exception as ex:
             m = 'Error when get the md5 for the file %s: %s' % (filePath, ex)
             self.log.error(m)
 
@@ -631,8 +619,7 @@ class UpcDbUpdationThread(threading.Thread):
                 sqls.append(sql)
                 sqls.append('DETACH DATABASE mkcdb;')
                 db.updateTrs(sqls)
-            except Exception:
-                ex = None
+            except Exception as ex:
                 self.log.error('Failed to update movie id for rfids.')
 
         finally:
@@ -655,8 +642,7 @@ class UpcDbUpdationThread(threading.Thread):
             db = Db(NEW_UPC_DB_PATH)
             db.updateMany(sql, result['zdata'])
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_correctInternationalRating: %s' % ex)
 
 
@@ -681,8 +667,7 @@ class UpcDbUpdationThread(threading.Thread):
                             sch = re.sub(re.compile('upc\\s*\\(', re.I), 'new_release_cache\n(', sch)
                             schTools.fortifyTable(sch)
                         
-                    except Exception:
-                        ex = None
+                    except Exception as ex:
                         self.log.error('_verifySchema: %s %s' % (name, ex))
                         if i >= TRIES - 1:
                             raise 
@@ -701,14 +686,12 @@ class UpcDbUpdationThread(threading.Thread):
                 
                 try:
                     schTools.fortifyIndex(ind)
-                except Exception:
-                    ex = None
+                except Exception as ex:
                     self.log.warning('fortifyIndex ind: %s' % ex)
 
             
             del db
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_verifySchema: %s' % ex)
             raise 
 
@@ -724,8 +707,7 @@ class UpcDbUpdationThread(threading.Thread):
             del proxy
             if result:
                 limit = float(result)
-        except Exception:
-            ex = None
+        except Exception as ex:
             self.log.warning('_getBandwithLimitation: %s' % ex)
 
         return limit

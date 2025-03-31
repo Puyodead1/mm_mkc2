@@ -260,9 +260,8 @@ class CheckOutSwipeProsaForm(CustomerForm):
                             msg = N_('Max rental count reached.')
                             pm = { }
                         
-                        raise InvalidMemberException(msg, pm)
-            except Exception:
-                ex = None
+                        raise InvalidMemberexcept ion(msg, pm)
+            except Exception as ex:
                 log.error('get card info %s' % ex)
                 raise 
             
@@ -461,30 +460,25 @@ class CheckOutSwipeProsaForm(CustomerForm):
             self.nextWindowID = 'CheckOutEjectForm'
             self.windowJump = True
             return None
-        except CardReadException:
-            ex = None
+        except CardReadException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except CardDeclinedException:
-            ex = None
+        except CardDeclinedException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except DebitCardTimeOut:
-            ex = None
+        except DebitCardTimeOut as ex:
             self.timeoutSec = 0
             log.error('getResForSA reach time out')
             self.nextWindowID = 'ShoppingCartForm'
             self.windowJump = True
             return None
-        except InvalidMemberException:
-            ex = None
+        except InvalidMemberException as ex:
             self.flash.send('%s_ctr_message_box' % self.windowID, 'show', {
                 'message': ex.i18nmsg,
                 'type': 'alert' })
-        except Exception:
-            ex = None
+        except Exception as ex:
             raise 
         finally:
             self.robot.resetSerial()

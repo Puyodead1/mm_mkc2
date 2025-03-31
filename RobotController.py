@@ -1,7 +1,7 @@
 # Source Generated with Decompyle++
 # File: RobotController.pyc (Python 2.5)
 
-from control import *
+from robot import *
 
 class RobotException(Exception):
     
@@ -28,7 +28,6 @@ class InsertDiscException(Exception):
 
 
 class RobotController:
-    
     def __init__(self, log, taskid):
         robot = Robot()
         self.robot = robot.getInstance()
