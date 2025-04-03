@@ -9,11 +9,12 @@ import os
 import select
 import time
 import json
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore
 from squery import socketQuery
 
 class MainControl(QtCore.QThread):
-    
+    execCommand = QtCore.pyqtSignal(str)
+
     def __init__(self, parent = None):
         QtCore.QThread.__init__(self)
         self.sock = socketQuery()
@@ -22,6 +23,7 @@ class MainControl(QtCore.QThread):
 
     
     def setLanguage(self, param):
+        print("MC: setLangauge")
         if not param or not param['lang']:
             self.trace.error('[setLanguage] [Error] Invalid param: %s' % param)
             return None
@@ -45,7 +47,7 @@ class MainControl(QtCore.QThread):
                 
             
             config.transFile = 'trans_' + lang + '.qm'
-            self.emit(QtCore.SIGNAL('execCommand(QString)'), 'self.setLanguage()')
+            self.execCommand("self.setLanguage()")
         else:
             '\n            config.pic_btn_rent_bg = config.PICDIR+"btn_bg_rent.png"\n            config.pic_btn_return_bg = config.PICDIR+"btn_bg_return.png"\n            config.pic_btn_pickup_bg = config.PICDIR+"btn_bg_p.png"\n            '
             config.pic_bg_admin = config.PICDIR + 'bg_admin.png'
@@ -53,58 +55,61 @@ class MainControl(QtCore.QThread):
             config.pic_test_flag = config.PICDIR + 'test_mode_flag.png'
             config.pic_coming_soon = config.PICDIR + 'mask_comingSoon.png'
             config.transFile = ''
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), 'self.setLanguage()')
+        self.execCommand("self.setLanguage()")
 
     
     def initGUI(self, param = { }):
+        print("MC: initGui", param)
         transDir = transDir
-        import config_mkc
         if param and 'model' in param and param['model'] == '1':
             os.system('echo "image_game/" > ' + transDir + '.config_model')
-            self.emit(QtCore.SIGNAL('execCommand(QString)'), 'self.initGUI(1)')
+            self.execCommand("self.initGUI(1)")
         else:
             os.system('rm -rf ' + transDir + '.config_model')
-            self.emit(QtCore.SIGNAL('execCommand(QString)'), 'self.initGUI()')
+            self.execCommand("self.initGUI()")
 
     
     def gotoWindow(self, param):
+        print("MC: gotoWindow", param)
         wid = param['wid']
         if not wid:
             print('[gotoWindow] Error: wid can not be NULL!')
             return -1
         
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), 'objforms.hideCurrentForm()')
+        self.execCommand("objforms.hideCurrentForm()")
         if wid == 'LoadTakeInForm' or wid == 'LoadResultForm':
             cmd = "objforms.showForm('LoadDiscInfoForm')"
-            self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+            self.execCommand(cmd)
         
         cmd = "objforms.showForm('" + str(wid) + "')"
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+        self.execCommand(cmd)
 
     
     def showWindow(self, param):
+        print("MC: showWindow", param)
         wid = param['wid']
         if not wid:
             print('[gotoWindow] Error: wid can not be NULL!')
             return -1
         
         cmd = "objforms.showForm('" + str(wid) + "')"
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+        self.execCommand(cmd)
 
     
     def hideWindow(self, param):
+        print("MC: hideWindow", param)
         wid = param['wid']
         if not wid:
             print('[gotoWindow] Error: wid can not be NULL!')
             return -1
         
         cmd = "objforms.hideForm('" + str(wid) + "')"
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+        self.execCommand(cmd)
 
     
     def exitNormal(self):
         print('GUI Will exit normally...')
-        self.emit(QtCore.SIGNAL('execCommand(QString)'), 'exitNormal')
+        self.execCommand("exitNormal")
 
     
     def setCurrencySymbol(self, param):
@@ -115,10 +120,10 @@ class MainControl(QtCore.QThread):
 
     
     def revData(self):
+        print("MC: revData")
         last_error_time = ''
         error_count = 0
         while True:
-            
             try:
                 (rlist, wlist, elist) = select.select([
                     self.sock.sd], [], [], 0.0001)
@@ -158,9 +163,8 @@ class MainControl(QtCore.QThread):
 
     
     def process(self, jstring):
-        
+        print("MC: process", jstring)
         try:
-            
             try:
                 data = json.loads(jstring)
             except Exception as ex:
@@ -201,14 +205,14 @@ class MainControl(QtCore.QThread):
                         param = data['param_info']['text']
                         param = repr(param)
                         cmd = 'objforms.getForm("' + wid + '").ui.' + cid + '.' + func + '(' + param + ')'
-                        self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+                        self.execCommand("cmd")
                         return None
                     else:
                         param = data['param_info']
                     cmd = "objforms.getForm('" + wid + "').ui." + cid + '.' + func + '(' + str(param) + ')'
                 else:
                     cmd = "objforms.getForm('" + wid + "').ui." + cid + '.' + func + '()'
-                self.emit(QtCore.SIGNAL('execCommand(QString)'), cmd)
+                self.execCommand("cmd")
             else:
                 self.trace.error('[process] [Error]: Received Invalid Data! %s' % data)
                 return -1

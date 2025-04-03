@@ -8,17 +8,17 @@ Main application
 
 import sys
 import os
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 from control import MainControl
 
 #############################
 # Main application class
 #############################
 
-class MainApp(QtGui.QApplication):
+class MainApp(QtWidgets.QApplication):
 
 	def __init__(self, argv):
-		QtGui.QApplication.__init__(self, argv)
+		QtWidgets.QApplication.__init__(self, argv)
 
 		self.control = MainControl()
 		self.translate = QtCore.QTranslator()
@@ -28,6 +28,7 @@ class MainApp(QtGui.QApplication):
 	#############################
 
 	def execCmd(self, cmd):
+		print("execCmd", cmd)
 		try:
 			self.control.trace.info(cmd)
 			cmd = cmd.toLocal8Bit().data()
@@ -49,6 +50,7 @@ class MainApp(QtGui.QApplication):
 	# Init GUI
 	##
 	def initGUI(self, param=0):
+		print('init gui', param)
 		##
 		# Create all forms
 		##
@@ -61,6 +63,7 @@ class MainApp(QtGui.QApplication):
 	# Internationalization
 	##
 	def setLanguage(self):
+		print("setLanguage")
 		import config
 		if os.path.isfile(config.transDir+config.transFile):
 			self.translate.load(config.transFile, config.transDir)
@@ -75,8 +78,8 @@ class MainApp(QtGui.QApplication):
 if __name__ == "__main__":
 
 	app = MainApp(sys.argv)
-	app.connect(app.control, QtCore.SIGNAL("execCommand(QString)"), app.execCmd)
+	app.control.execCommand.connect(app.execCmd)
 	app.control.start()
-	app.setOverrideCursor(QtCore.Qt.BlankCursor)
+	app.setOverrideCursor(QtCore.Qt.CursorShape.BlankCursor)
 
 	sys.exit(app.exec_())

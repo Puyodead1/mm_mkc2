@@ -127,7 +127,6 @@ class UIListener(threading.Thread):
 
     
     def run(self):
-        
         try:
             while True:
                 trace.info('[UIListener run] ~~~~~~~~~~~~~~~~ only one! only one!')
@@ -163,9 +162,9 @@ class UIListener(threading.Thread):
                         break
 
                     if self.cli_sd in stdin:
-                        
                         try:
                             data = self.cli_sd.recv(8192)
+                            print(data)
                         except:
                             trace.info('[UIListener run] socket except, set data to null\n%s' % traceback.format_exc())
                             data = ''
@@ -248,13 +247,12 @@ class UIListener(threading.Thread):
 
     
     def send_msg(self, msg):
-        
         try:
             if self.cli_sd:
                 trace.info('WILL SEND MSG type:%s, context:%s' % (type(msg), msg))
                 length = len(msg)
-                self.cli_sd.send(str(length) + '\n')
-                self.cli_sd.send(msg)
+                self.cli_sd.send((str(length) + '\n').encode())
+                self.cli_sd.send(msg.encode())
             else:
                 trace.error('[UIListener send_msg] client socket not ready')
         except Exception as ex:
@@ -298,7 +296,6 @@ class MKCListener(threading.Thread):
     
     def run(self):
         while True:
-            
             try:
                 qitem = self.from_mkc_Q.get(timeout = 1)
                 if qitem and qitem.param:
@@ -314,7 +311,6 @@ class MKCListener(threading.Thread):
 
     
     def process(self, qitem):
-        
         try:
             if qitem.param['wid'] == 'sub_movie_detail' and qitem.param['cid'] == 'video_movie_player':
                 if qitem.param['cmd'] in ('playByName', 'close'):

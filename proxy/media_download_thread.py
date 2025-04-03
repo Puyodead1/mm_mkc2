@@ -17,7 +17,7 @@
 '''
 import os
 import sys
-import md5
+import hashlib
 import threading
 import time
 import shutil
@@ -430,7 +430,7 @@ class MediaDownloadThread(threading.Thread):
         fileMd5 = ''
         
         try:
-            mf = md5.new()
+            mf = hashlib.md5()
             f = open(filePath)
             mf.update(f.read())
             f.close()

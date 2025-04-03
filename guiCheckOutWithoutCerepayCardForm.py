@@ -191,7 +191,7 @@ class CheckOutWithoutCerepayCardForm(CustomerForm):
                     msg = N_('Max rental count reached.')
                     pm = { }
                 
-                raise InvalidMemberexcept ion(msg, pm)
+                raise InvalidMemberException(msg, pm)
             self._chargeCard()
             globalSession.customer = self.customer
             self.nextWindowID = 'CheckOutEjectForm'

@@ -291,7 +291,7 @@ class RSerial:
         return True
     
     def resetSerial(self):
-        self.ser = serial.Serial("/dev/ttyS0", 57600, parity=serial.PARITY_NONE, timeout=5)
+        self.ser = serial.Serial("/dev/pts/10", 57600, parity=serial.PARITY_NONE, timeout=5)
 
     def __processRxQueue(self):
         # look for STX
@@ -460,7 +460,7 @@ class RSerial:
                 return
     
     def handshake(self):
-        packet = chr(self.STX) + chr(self.TYPE_HANDSHAKE) + chr(self.TYPE_HANDSHAKE) + chr(self.ETX)
+        packet = bytes([self.STX, self.TYPE_HANDSHAKE, self.TYPE_HANDSHAKE, self.ETX])
         counter = 0
         while 1:
             self.getHandshakeReply=0
@@ -484,79 +484,80 @@ class RSerial:
     def handshakeReply(self):
        # print "sendHandshakeReply"
         self.__state(self.STATE_CONNECTED)
-        packet = chr(self.STX) + chr(self.TYPE_HANDSHAKE_REPLY) + chr(self.TYPE_HANDSHAKE_REPLY) + chr(self.ETX)
+        packet = bytes([self.STX, self.TYPE_HANDSHAKE_REPLY, self.TYPE_HANDSHAKE_REPLY, self.ETX])
         self.__send_lock(packet) 
     
-    def sendPacket(self,type,seq=None,data=None,sub_type=None,tx_seq=None):
+    def sendPacket(self, type, seq=None, data=None, sub_type=None, tx_seq=None):
         try:
             self.tlock.acquire()
-            packet=chr(self.STX)+ chr(type)
+
+            packet = bytes([self.STX, type])  # Start packet with STX and type
+
+            # Determine tx_seq if not provided
             if not tx_seq:
-                txseq=self.__increaseTSeq()
+                txseq = self.__increaseTSeq()
             else:
-                txseq=tx_seq
-          #  print "Sending data with sequqnce number:%d "%  txseq
-                ## 
-            if type==self.TYPE_ACK:
-               # print "Send Ack"
-                ##STX ACK SEQ ASEQ ETX
-                packet+=self.__encodeHexByte(seq)
-                packet+=chr(sub_type)
-                packet+=chr(self.ETX)
-            elif type==self.TYPE_DAT :
-               # print "Send DAT"
-                ##STX DAT SEQ ASEQ data checksum ETX
-                packet+=self.__encodeHexByte(txseq)
-                checksum=self.__checksum(data)
-                packet+=data
-                packet+=self.__encodeHexByte(checksum)
-                packet+=chr(self.ETX)
-            elif type==self.TYPE_RESULT :
-               # print "Send Result"
-                ##STX DAT SEQ ASEQ data checksum ETX
-               # print "123455", seq
-                packet+=self.__encodeHexByte(txseq)
-                packet+=self.__encodeHexByte(seq)
-                checksum=self.__checksum(data)
-                packet+=data
-                
-                packet+=self.__encodeHexByte(checksum)
-                packet+=chr(self.ETX)
-            elif type==self.TYPE_CMD:
-               # print "Send CMD"
-                ##STX DAT SEQ ASEQ data checksum ETX
-                packet+=self.__encodeHexByte(txseq)
-                packet+=chr(sub_type)
-                packet+=chr(sub_type)
-                packet+=self.ETX
-            elif type==self.TYPE_SYNC:
-               # print "Send SYNC"
-                ##STX DAT SEQ ASEQ data checksum ETX
-                packet+=self.__encodeHexByte(txseq)
-                packet+=self.ETX
-            elif type==self.TYPE_CANCEL:
-              #  print "Send CANCEL"
-                ##STX DAT SEQ ASEQ data checksum ETX
-                packet+=self.__encodeHexByte(seq)
-                packet+=self.ETX
-            elif type==self.TYPE_EVENT:
-                print("Send Event")
-               ##STX EVENT SEQ ASEQ event_type event_ content ETX
-                packet+=self.__encodeHexByte(txseq)
-                checksum=self.__checksum(data)
-                packet+=data
-                packet+=self.__encodeHexByte(checksum)
-                packet+=chr(self.ETX)
+                txseq = tx_seq
+
+            if type == self.TYPE_ACK:
+                # Packet format: STX ACK SEQ ASEQ ETX
+                packet += bytes([seq])
+                packet += bytes([sub_type])
+                packet += (self.ETX).to_bytes(1, byteorder='big')  # Correct to_bytes usage
+
+            elif type == self.TYPE_DAT:
+                # Packet format: STX DAT SEQ ASEQ data checksum ETX
+                packet += txseq.to_bytes(4, byteorder='big')  # Convert txseq to bytes (4 bytes)
+                checksum = self.__checksum(data)
+                packet += data.encode()  # Data should be bytes (string encoding)
+                packet += checksum.to_bytes(2, byteorder='big')  # Convert checksum to bytes (2 bytes)
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
+            elif type == self.TYPE_RESULT:
+                # Packet format: STX DAT SEQ ASEQ data checksum ETX
+                packet += txseq.to_bytes(4, byteorder='big')
+                packet += seq.to_bytes(4, byteorder='big')  # Add seq (also needs to be bytes)
+                checksum = self.__checksum(data)
+                packet += data.encode()
+                packet += checksum.to_bytes(2, byteorder='big')
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
+            elif type == self.TYPE_CMD:
+                # Packet format: STX CMD SEQ ASEQ sub_type sub_type ETX
+                packet += txseq.to_bytes(4, byteorder='big')
+                packet += sub_type.to_bytes(1, byteorder='big')  # Assuming sub_type is an int
+                packet += sub_type.to_bytes(1, byteorder='big')
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
+            elif type == self.TYPE_SYNC:
+                # Packet format: STX SYNC SEQ ASEQ ETX
+                packet += txseq.to_bytes(4, byteorder='big')
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
+            elif type == self.TYPE_CANCEL:
+                # Packet format: STX CANCEL SEQ ASEQ ETX
+                packet += seq.to_bytes(4, byteorder='big')
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
+            elif type == self.TYPE_EVENT:
+                # Packet format: STX EVENT SEQ ASEQ event_type event_content ETX
+                packet += txseq.to_bytes(4, byteorder='big')
+                checksum = self.__checksum(data)
+                packet += data.encode()
+                packet += checksum.to_bytes(2, byteorder='big')
+                packet += (self.ETX).to_bytes(1, byteorder='big')
+
             else:
-             #   print "Type: ", type, "has not yet implemented" 
+                print(f"Type: {type} has not been implemented")
                 return None
-       
+
             self.__send(packet)
-          #  print "Send Packet:", [packet]
+
         finally:
-            self.tlock.release()   
-     #   print "sendPacketok"         
-        return txseq 
+            self.tlock.release()
+
+        return txseq
+
     
     def sendAck(self,seq,stat):
       #  print "sendAck......."
@@ -1002,7 +1003,7 @@ if __name__=="__main__":
         if len(sys.argv) >2:
             ser=RSerial(serPort=sys.argv[2])
         else:
-            ser=RSerial(serPort="/dev/ttyS0")
+            ser=RSerial(serPort="/dev/pts/10")
         thread=Control_Debug(ser)
         thread.start()
         thread.join()
@@ -1011,7 +1012,7 @@ if __name__=="__main__":
         r=input( "this method has been obsoleted by downloader.py, are you still want to go on?[y/N]")
         if r.lower()!="y":
             sys.exit(0)
-        port="/dev/ttyS0"
+        port="/dev/pts/10"
         if len(sys.argv) > 2:
             port=sys.argv[2]
         ser=RSerial(serPort=port)
@@ -1054,7 +1055,7 @@ if __name__=="__main__":
     if len(sys.argv) >1:         
         ser=RSerial(serPort=sys.argv[1])
     else:
-        ser=RSerial("/dev/ttyS0")
+        ser=RSerial("/dev/pts/10")
     ser.eventCallback=eventCallback
     if len(sys.argv) > 2:
         if sys.argv[2]=="control":

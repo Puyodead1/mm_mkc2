@@ -119,12 +119,15 @@ class Main(object):
         self.connProxy = ConnProxy.getInstance()
         self.connProxy.verifyDb()
         self._initForms()
+
+        print('init form finished')
         
         try:
             self.connProxy.logMkcEvent(category = 'system', action = 'startup', data1 = 'MKC Start')
         except:
             pass
 
+        print("init robot")
         # self.connProxy.setKioskInfo()
         (self.rerr, self.rmsg) = initRobot()
         log.info('[Main run] ROBOT INIT: %s, %s' % (self.rerr, self.rmsg))

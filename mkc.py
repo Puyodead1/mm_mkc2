@@ -19,7 +19,7 @@ import subprocess
 import fcntl
 import traceback
 import logging
-import Image
+from PIL import Image
 
 #from linuxCmd import stopHdmi
 from proxy.conn_proxy import ConnProxy

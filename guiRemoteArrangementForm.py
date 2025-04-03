@@ -182,7 +182,7 @@ class RemoteArrangementForm(RobotForm):
                 msg = 'Remote Arrange Failed, ' + ex.message
                 log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
                 success = False
-                self.except ions = ex
+                self.exceptions = ex
                 break
             except Exception as ex:
                 msg = 'Remote Arrange Failed, ' + ex.message
@@ -211,7 +211,7 @@ class RemoteArrangementForm(RobotForm):
             msg = 'Remote Arrange Failed, ' + ex.message
             log.error('%s ---->\n%s' % (msg, traceback.format_exc()))
             success = False
-            self.except ions = ex
+            self.exceptions = ex
         except Exception as ex:
             msg = 'Remote Arrange Failed, ' + ex.message
             log.error('%s ---->\n%s' % (msg, traceback.format_exc()))

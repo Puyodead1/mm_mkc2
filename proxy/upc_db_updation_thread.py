@@ -30,17 +30,16 @@
 '''
 import os
 import re
-import md5
+import hashlib
 import time
 import random
 import datetime
 import tarfile
 import shutil
 import threading
-from . import tools
 from .mda import Db
 from .movie_proxy import MovieProxy
-from .tools import getKioskId, getLog, getCurTime, getTimeChange
+from .tools import getKioskId, getLog, getCurTime
 from .config import *
 NEW_UPC_DB_PATH = os.path.join(USER_ROOT, 'kiosk/var/db/new_upc.db')
 NEW_PIC_PATH = os.path.join(USER_ROOT, 'kiosk/var/gui/newpic/')
@@ -335,6 +334,7 @@ class UpcDbUpdationThread(threading.Thread):
             sqls.append(sql)
             db.updateTrs(sqls)
         except Exception as ex:
+            pass
 
         del db
 
@@ -535,7 +535,7 @@ class UpcDbUpdationThread(threading.Thread):
         fileMd5 = ''
         
         try:
-            mf = md5.new()
+            mf = hashlib.md5()
             f = open(filePath)
             mf.update(f.read())
             f.close()

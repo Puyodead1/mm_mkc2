@@ -1,7 +1,10 @@
 # Source Generated with Decompyle++
 # File: config_mkc.pyc (Python 2.5)
 
-import logging.handlers as logging
+import logging
+import logging.handlers
+
+
 HOST = '127.0.0.1'
 PORT = 50007
 MAXDATA = 2 * 4096

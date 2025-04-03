@@ -8,7 +8,7 @@ Created on 2010-5-28
 import time
 import serial
 import types
-import Image
+from PIL import Image
 from mcommon import maskCard
 
 class Printer(object):

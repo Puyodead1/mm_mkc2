@@ -551,7 +551,7 @@ ROBOT_OPERATION_TIMEOUT = 49
 class Robot(threading.Thread):
     def on_init(self):
         threading.Thread.__init__(self, name = 'robot')
-        ser = RSerial(serPort = '/dev/ttyS0')
+        ser = RSerial(serPort = '/dev/pts/10')
         self.ser = ser
         self._cancel = 0
         self.ser.resultCallback = self.resultCallback

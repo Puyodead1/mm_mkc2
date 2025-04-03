@@ -155,7 +155,7 @@ class CheckOutSwipeSiTefForm(CustomerForm):
                     msg = N_('Max rental count reached.')
                     pm = { }
                 
-                raise InvalidMemberexcept ion(msg, pm)
+                raise InvalidMemberException(msg, pm)
             self._checkMemberDetail()
             self._check_monthly_subscription()
             globalSession.customer = self.customer

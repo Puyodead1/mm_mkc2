@@ -4,7 +4,6 @@
 import socket
 import config_mkc
 import json
-import sys
 
 class socketQuery:
     

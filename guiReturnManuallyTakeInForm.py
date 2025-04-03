@@ -22,7 +22,7 @@ from sqlite3 import OperationalError
 from guiRobotForm import RobotForm
 from mcommon import initlog, globalSession, N_, SaveStatusError, WrongInRfidError, ERROR, getPicFullPath
 from mobject import Disc, ShoppingCart, InsertException, RetrieveExchangeException, InvalidDiscException, FatalError, KioskMessage
-from control import ROBOT_CANCELED, ROBOT_OK, ROBOT_TIMEOUT, ROBOT_RFID_READ_ERROR, ROBOT_INVALID_RFID, ROBOT_INVALID_LABEL
+from mcommon import ROBOT_CANCELED, ROBOT_OK, ROBOT_TIMEOUT, ROBOT_RFID_READ_ERROR, ROBOT_INVALID_RFID, ROBOT_INVALID_LABEL
 from proxy.tools import getTimeChange, fmtMoney
 log = initlog('guiReturnManuallyTakeInForm')
 (NO_DISC_OUT, CONFIRM_RETURN, SUBMIT_CLICK) = list(range(3))

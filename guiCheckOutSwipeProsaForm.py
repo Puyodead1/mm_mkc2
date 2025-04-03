@@ -260,7 +260,7 @@ class CheckOutSwipeProsaForm(CustomerForm):
                             msg = N_('Max rental count reached.')
                             pm = { }
                         
-                        raise InvalidMemberexcept ion(msg, pm)
+                        raise InvalidMemberException(msg, pm)
             except Exception as ex:
                 log.error('get card info %s' % ex)
                 raise 

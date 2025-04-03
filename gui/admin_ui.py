@@ -4,7 +4,6 @@
 from PyQt4 import QtCore, QtGui
 
 class Ui_adminForm(object):
-    
     def setupUi(self, adminForm):
         adminForm.setObjectName('adminForm')
         adminForm.resize(QtCore.QSize(QtCore.QRect(0, 0, 768, 1024).size()).expandedTo(adminForm.minimumSizeHint()))

@@ -45,8 +45,8 @@ QTGUI = os.path.join(KIOSK_HOME, "kiosk/mkc2/gui/gui.py")
 
 RESTART_INTERVAL = 60
 
-machine_port = '/dev/ttyS0'
-card_port = '/dev/ttyS0'
+machine_port = '/dev/pts/10'
+card_port = '/dev/pts/10'
 printer_port = '/dev/ttyS2'
 
 flash_port = 50007

@@ -76,7 +76,7 @@ def stopMkc(chkLock):
                 return False
         
         connProxy.logMkcEvent(category="system", action="startup", data1="MKC Stop")
-        cmd = 'kill -9 ' + str(pid)
+        cmd = 'sudo kill -9 ' + str(pid)
         os.system(cmd)
         print('MKC stopped')
         
@@ -98,7 +98,7 @@ def startMkc():
         print('MKC started')
         print("Starting HDMI .....")
         #time.sleep(5)
-        startHdmi()
+        # startHdmi()
     else:
         print('MKC is already running')
         print("please use './mkc.py stop' to stop the previous MKC instance")

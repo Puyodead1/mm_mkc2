@@ -30,8 +30,6 @@
             New Movie proxy.
 '''
 import os
-import sys
-import md5
 import time
 import base64
 
@@ -42,9 +40,9 @@ except:
     pass
 
 from .base_proxy import Proxy
-from .tools import getCurTime, RemoteError, getTimeChange, sqlQuote, fmtMoney, fmtNoneStr
+from .tools import getCurTime, getTimeChange, fmtNoneStr
 from .config import *
-from .mda import DatabaseError, Db
+from .mda import Db
 __version__ = '0.0.3'
 PROXY_NAME = 'MOVIE_PROXY'
 

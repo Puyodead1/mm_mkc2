@@ -132,7 +132,7 @@ class RegisterSwipeCardForm(RobotForm):
                     else:
                         log.error('[%s] - Card reader unknown error:%s' % (self.windowID, errno))
                         msg = N_('Card reader fails, please retry.')
-                        raise CardReadexcept ion(msg)
+                        raise CardReadException(msg)
                     self.flash.send('btn_cancel', 'hide', { })
                     self.flash.send('btn_back', 'hide', { })
                     track1 = retFromRobot['track1']

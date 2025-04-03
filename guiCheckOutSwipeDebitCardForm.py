@@ -187,7 +187,7 @@ class CheckOutSwipeDebitCardForm(CustomerForm):
                     msg = N_('Max rental count reached.')
                     pm = { }
                 
-                raise InvalidMemberexcept ion(msg, pm)
+                raise InvalidMemberException(msg, pm)
             self._checkMemberDetail()
             globalSession.customer = self.customer
             self.nextWindowID = 'CheckOutEjectForm'

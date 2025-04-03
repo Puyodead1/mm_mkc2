@@ -34,7 +34,6 @@
 '''
 import os
 import re
-import md5
 import time
 import base64
 import datetime
